@@ -1,0 +1,176 @@
+# NVIDIA Tegra5 "Jetson" development system
+#
+# Copyright (c) 2013 NVIDIA Corporation.  All rights reserved.
+
+## Common product locale
+PRODUCT_LOCALES += en_US
+
+## Common packages
+$(call inherit-product-if-exists, vendor/nvidia/tegra/core/nvidia-tegra-vendor.mk)
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml \
+    frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
+    frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
+    frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+    frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
+    frameworks/native/data/etc/android.hardware.opengles.aep.xml:system/etc/permissions/android.hardware.opengles.aep.xml \
+    frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
+    frameworks/native/data/etc/android.hardware.hdmi.cec.xml:system/etc/permissions/android.hardware.hdmi.cec.xml \
+    frameworks/native/data/etc/android.software.app_widgets.xml:system/etc/permissions/android.software.app_widgets.xml \
+    frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml
+
+$(call inherit-product-if-exists, device/ara/common/ara_common.mk)
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/media_profiles.xml:system/etc/media_profiles.xml \
+    $(LOCAL_PATH)/media_codecs.xml:system/etc/media_codecs.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
+    $(LOCAL_PATH)/audio_policy.conf:system/etc/audio_policy.conf
+
+# Bluetooth
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/bdaddr:system/etc/bdaddr
+
+LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
+TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/init.jetson.rc:root/init.jetson.rc \
+    $(LOCAL_PATH)/init.jetson.usb.rc:root/init.jetson.usb.rc \
+    $(LOCAL_PATH)/init.recovery.jetson.rc:root/init.recovery.jetson.rc \
+    $(LOCAL_FSTAB):root/fstab.jetson \
+    $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc
+
+## REFERENCE_DEVICE
+REFERENCE_DEVICE := ardbeg
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/h2w_headset.kl:system/usr/keylayout/h2w_headset.kl
+
+# Live Wallpapers
+PRODUCT_PACKAGES += \
+    LiveWallpapersPicker \
+    librs_jni
+
+PRODUCT_PACKAGES += \
+    librs_jni \
+    com.android.future.usb.accessory \
+    com.android.location.provider
+
+# Filesystem management tools
+PRODUCT_PACKAGES += \
+    setup_fs \
+    e2fsck
+
+# basic lights HAL
+PRODUCT_PACKAGES += \
+    lights.jetson
+
+# Audio support
+PRODUCT_PACKAGES += \
+    audio.primary.jetson \
+    audio.a2dp.default \
+    audio.usb.default \
+    audio.r_submix.default \
+    tinymix \
+    tinyplay \
+    tinycap
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/enctune.conf:system/etc/enctune.conf \
+    $(LOCAL_PATH)/nvaudio_conf.xml:system/etc/nvaudio_conf.xml \
+    $(LOCAL_PATH)/nvcamera.conf:system/etc/nvcamera.conf
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/mixer_paths.xml:system/etc/mixer_paths.xml
+
+PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0
+
+# non hw accelerated graphics support
+PRODUCT_PACKAGES += \
+    libGLES_android \
+    libGLESv1_CM_emulation \
+    lib_renderControl_enc \
+    libEGL_emulation \
+    libGLESv2_enc \
+    libOpenglSystemCommon \
+    libGLESv2_emulation \
+    libGLESv1_enc
+
+# no-hw accelerated graphics properties to be set in system/build.prop by default
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.nohardwaregfx=true \
+    ro.opengles.version=131072 \
+    ro.sf.lcd_density=160 \
+    debug.sf.no_hw_vsync=1 \
+    ro.kernel.qemu.gles=0 \
+    ro.kernel.qemu=1
+
+#ENABLE_WIDEVINE_DRM := true
+ifeq ($(ENABLE_WIDEVINE_DRM),true)
+#enable Widevine drm
+PRODUCT_PROPERTY_OVERRIDES += drm.service.enabled=true
+PRODUCT_PACKAGES += \
+    com.google.widevine.software.drm.xml \
+    com.google.widevine.software.drm \
+    libwvdrmengine \
+    libwvm \
+    libWVStreamControlAPI_L3 \
+    libwvdrm_L3
+endif
+
+# NVIDIA hardware support
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/init.ussrd.rc:root/init.ussrd.rc \
+    $(LOCAL_PATH)/ussr_setup.sh:system/bin/ussr_setup.sh \
+    $(LOCAL_PATH)/ussrd.conf:system/etc/ussrd.conf \
+    $(LOCAL_PATH)/set_hwui_params.sh:system/bin/set_hwui_params.sh \
+    $(LOCAL_PATH)/power.ardbeg.rc:system/etc/power.ardbeg.rc \
+    $(LOCAL_PATH)/nvcms/device.cfg:system/lib/nvcms/device.cfg \
+    $(LOCAL_PATH)/graphics/com.nvidia.graphics.xml:system/etc/permissions/com.nvidia.graphics.xml \
+    $(LOCAL_PATH)/graphics/com.nvidia.miracast.xml:system/etc/permissions/com.nvidia.miracast.xml
+
+# vendor HALs
+PRODUCT_PACKAGES += \
+    gralloc.tegra \
+    hwcomposer.tegra \
+    power.tegra
+
+PRODUCT_PACKAGES += \
+    lbh_images
+
+# HDCP SRM Support
+PRODUCT_PACKAGES += \
+    hdcp1x.srm \
+    hdcp2x.srm \
+    hdcp2xtest.srm
+
+# we have enough storage space to hold precise GC data
+PRODUCT_TAGS += dalvik.gc.type-precise
+
+PRODUCT_CHARACTERISTICS := tablet
+
+# Set up device overlays
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-common
+
+PRODUCT_AAPT_CONFIG := normal large xlarge hdpi xhdpi
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
+
+$(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
+
+# set default USB configuration
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp \
+    ro.adb.secure=0
+
+$(call inherit-product-if-exists, hardware/nvidia/tegra124/tegra124.mk)
+$(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-vendor.mk)
