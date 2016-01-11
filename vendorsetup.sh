@@ -21,4 +21,5 @@
 # function: add_lunch_combo generic-eng
 
 add_lunch_combo jetson-eng
+add_lunch_combo jetson-userdebug
 
