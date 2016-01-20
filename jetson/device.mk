@@ -58,15 +58,19 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/permissions/com.nvidia.blakemanager.xml:system/etc/permissions/com.nvidia.blakemanager.xml \
     $(LOCAL_PATH)/permissions/com.nvidia.feature.xml:system/etc/permissions/com.nvidia.feature.xml	
 
+# Bluetooth
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+
 # HDMI
 PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
 
+# Codec Configs
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/media_profiles.xml:system/etc/media_profiles.xml \
-    $(LOCAL_PATH)/media_codecs.xml:system/etc/media_codecs.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
-    $(LOCAL_PATH)/audio_policy.conf:system/etc/audio_policy.conf
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:syste$
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:syste$
+    $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
 
 # Bluetooth
 PRODUCT_COPY_FILES += \
@@ -114,6 +118,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
 
 PRODUCT_PACKAGES += \
+    audio_policy.default \
+    audio.primary.default \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
@@ -189,6 +195,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 $(call inherit-product-if-exists, hardware/nvidia/tegra124/tegra124.mk)
 $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-vendor.mk)
-$(call inherit-product-if-exists, vendor/nvidia/shieldtablet/shieldtablet-vendor.mk)
-$(call inherit-product-if-exists, vendor/nvidia/shield_common/blake-blobs.mk)
-
+#$(call inherit-product-if-exists, vendor/nvidia/shieldtablet/shieldtablet-vendor.mk)
+#$(call inherit-product-if-exists, vendor/nvidia/shield_common/blake-blobs.mk)
+$(call inherit-product, vendor/nvidia/jetson/jetson-vendor.mk)

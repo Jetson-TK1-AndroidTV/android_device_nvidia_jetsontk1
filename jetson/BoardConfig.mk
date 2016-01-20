@@ -15,7 +15,12 @@
 #
 
 # Use the non-open-source parts, if they're present
-include vendor/nvidia/shieldtablet/BoardConfigVendor.mk
+#include vendor/nvidia/shieldtablet/BoardConfigVendor.mk
+
+BOARD_SUPPORT_NVOICE := true
+
+BOARD_SUPPORT_NVAUDIOFX :=true
+
 
 # Enable dex-preoptimization to speed up first boot sequence
 ifeq ($(HOST_OS),linux)
@@ -39,13 +44,14 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := cortex-a15
 TARGET_CPU_SMP := true
 
-# AUDIO LIBAUDIO
-# BOARD_USES_ALSA_AUDIO := true
-# BOARD_USES_TINY_ALSA_AUDIO := true
-
 # Audio
 BOARD_USES_GENERIC_AUDIO := false
 BOARD_USES_ALSA_AUDIO := true
+
+# Bluetooth
+BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH_BCM := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/nvidia/jetson/bluetooth
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
@@ -76,10 +82,14 @@ TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_TYPE := fastboot
 
 # KERNEL (LINARO TASK SETTINGS)
-#TARGET_NO_KERNEL := false
-TARGET_KERNEL_SOURCE := kernel/tegra
+#TARGET_NO_KERNEL = false
+TARGET_KERNEL_SOURCE := kernel/jetsontk1/tegra
 TARGET_KERNEL_APPEND_DTB := true
-KERNEL_CONFIG :=  tegra12_android_hdmi-primary_defconfig
+TARGET_KERNEL_CONFIG :=  tegra12_android_defconfig
+KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
+KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.8/bin
+TARGET_KERNEL_HAVE_EXFAT = true
+TARGET_KERNEL_HAVE_NTSF = true
 BUILD_KERNEL_MODULES := true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -88,12 +98,6 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x01000000 --ramdisk_offset 0x02100000 -
 
 # powerhal
 BOARD_USES_POWERHAL := true
-
-# NVDPS can be enabled when display is set to continuous mode.
-BOARD_HAS_NVDPS := true
-
-# Don't use Nvidia HDCP libs
-BOARD_ENABLE_SECURE_HDCP := false
 
 # Use CMU-style config with Nvcms
 NVCMS_CMU_USE_CONFIG := true
@@ -111,29 +115,59 @@ TARGET_USE_NCT := false
 BOARD_HAVE_LBH_SUPPORT := false
 
 # board specific sepolicy
-BOARD_SEPOLICY_DIRS := device/nvidia/jetson/sepolicy
+# BOARD_SEPOLICY_DIRS := device/nvidia/jetson/sepolicy
 
-BOARD_SEPOLICY_UNION := \
-	bluetooth.te \
-	device.te \
-	drmserver.te \
-	file.te \
-	file_contexts \
-	genfs_contexts \
-	gpsd.te \
-	kernel.te \
-	kickstart.te \
-	mediaserver.te \
-	netd.te \
-	netmgrd.te \
-	qmuxd.te \
-	radio.te \
-	rild.te \
-	surfaceflinger.te \
-	system_server.te \
-	tee.te \
-	te_macros \
-	touch_fusion.te
+# SELinux
+# BOARD_SEPOLICY_DIRS += device/nvidia/shieldtablet/sepolicy
+# BOARD_SEPOLICY_UNION += \
+        te_macros \
+        agpsd.te \
+        app.te \
+        bluetooth.te \
+        bootanim.te \
+        cvc.te \
+        device.te \
+        domain.te \
+        drmserver.te \
+        fild.te \
+        file_contexts \
+        file.te \
+        genfs_contexts \
+        gpload.te \
+        gpsd.te \
+        healthd.te\
+        hostapd.te \
+        icera-crashlogs.te \
+        icera-feedback.te \
+        icera-loader.te \
+        icera-switcherd.te \
+        init.te \
+        installd.te \
+        mediaserver.te \
+        mock_modem.te \
+        netd.te \
+        platform_app.te \
+        property_contexts \
+        property.te \
+        raydium.te \
+        recovery.te \
+        service.te \
+        service_contexts \
+        set_hwui.te \
+        shell.te \
+        surfaceflinger.te \
+        system_app.te \
+        system_server.te \
+        tee.te \
+        ueventd.te \
+        untrusted_app.te \
+        usb.te \
+        ussrd.te \
+        ussr_setup.te \
+        vold.te \
+        wifi_loader.te \
+	wpa.te \
+	zygote.te
 
 # Recovery
 TARGET_RECOVERY_FSTAB = device/nvidia/jetson/fstab.jetson
