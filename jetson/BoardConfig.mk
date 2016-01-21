@@ -15,7 +15,7 @@
 #
 
 # Use the non-open-source parts, if they're present
-#include vendor/nvidia/shieldtablet/BoardConfigVendor.mk
+include vendor/nvidia/jetson/BoardConfigVendor.mk
 
 BOARD_SUPPORT_NVOICE := true
 
@@ -72,7 +72,8 @@ BOARD_CACHEIMAGE_PARTITION_SIZE := 805306368
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 4096
 
-USE_E2FSPROGS := true
+# Graphics
+SF_VSYNC_EVENT_PHASE_OFFSET_NS := 1
 USE_OPENGL_RENDERER := true
 
 # UBOOT/XLOADER

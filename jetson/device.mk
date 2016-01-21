@@ -27,6 +27,8 @@ $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-he
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/keylayouts/AliTV_Remote_V1_Airmouse.idc:system/usr/idc/AliTV_Remote_V1_Airmouse.idc \
+    $(LOCAL_PATH)/keylayouts/AliTV_Remote_V1_Airmouse.kl:system/usr/keylayout/AliTV_Remote_V1_Airmouse.kl \
     $(LOCAL_PATH)/keylayouts/ADT-1_Remote.kl:system/usr/keylayout/ADT-1_Remote.kl \
     $(LOCAL_PATH)/keylayouts/gpio-keypad.kl:system/usr/keylayout/gpio-keypad.kl \
     $(LOCAL_PATH)/keylayouts/Spike.kl:system/usr/keylayout/Spike.kl \
@@ -67,8 +69,8 @@ PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
 
 # Codec Configs
 PRODUCT_COPY_FILES += \
-    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:syste$
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:syste$
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
 
@@ -101,36 +103,36 @@ PRODUCT_PACKAGES += \
     com.android.future.usb.accessory \
     com.android.location.provider
 
-# Filesystem management tools
-PRODUCT_PACKAGES += \
-    setup_fs \
-    e2fsck
-
 # basic lights HAL
 PRODUCT_PACKAGES += \
     lights.jetson
 
 # Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audioConfig_qvoice_icera_pc400.xml:system/etc/audioConfig_qvoice_icera_pc400.xml \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/nvaudio_conf.xml:system/etc/nvaudio_conf.xml \
     $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
 
+# Audio
 PRODUCT_PACKAGES += \
-    audio_policy.default \
-    audio.primary.default \
-    audio.a2dp.default \
-    audio.usb.default \
-    audio.r_submix.default \
-    libaudio-resampler \
-    libaudiospdif \
     libtinyalsa \
+    audio.r_submix.default \
+    audio.usb.default \
+    audio.a2dp.default \
+    libaudiospdif \
+    libaudioutils \
     libtinycompress \
     tinycap \
     tinymix \
-    tinyplay \
-    xaplay
+    tinyplay
+
+# Add props used in stock
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vold.wipe_on_crypt_fail=1 \
+    ro.com.widevine.cachesize=16777216 \
+    media.stagefright.cache-params=10240/20480/15 \
+    media.aac_51_output_enabled=true \
+    dalvik.vm.implicit_checks=none
 
 PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0
 
