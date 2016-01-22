@@ -1,0 +1,1098 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2012 NVIDIA Corporation.  All Rights Reserved.
+
+     NVIDIA Corporation and its licensors retain all intellectual property and
+     proprietary rights in and to this software and related documentation.  Any
+     use, reproduction, disclosure or distribution of this software and related
+     documentation without an express license agreement from NVIDIA Corporation
+     is strictly prohibited.
+ */
+-->
+<!DOCTYPE AudioConfigs [
+  <!ELEMENT AudioConfigs (alsa_device)>
+  <!ELEMENT alsa_device (pcm_config, playback, capture, voice-call)>
+  <!ELEMENT playback (pcm_config, device, path)>
+  <!ELEMENT capture (pcm_config, device, path)>
+  <!ELEMENT voice-call (pcm_config, device, path)>
+  <!ELEMENT device (path)>
+  <!ELEMENT path (ctl)>
+  <!ATTLIST alsa_device name (music|voice|aux|voice-call|bt-voice-call|compress_offload) #REQUIRED>
+  <!ATTLIST alsa_device card_id CDATA #REQUIRED>
+  <!ATTLIST alsa_device card_name CDATA #REQUIRED>
+  <!ATTLIST alsa_device device_id CDATA #REQUIRED>
+  <!ELEMENT pcm_config EMPTY>
+  <!ATTLIST pcm_config rate (8000|11025|16000|22050|32000|44100|48000|64000|88200|96000|176400|192000) #IMPLIED>
+  <!ATTLIST pcm_config channels (1|2|3|4|5|6|7|8) #IMPLIED>
+  <!ATTLIST pcm_config bps (16|32) #IMPLIED>
+  <!ATTLIST pcm_config period_size CDATA #IMPLIED>
+  <!ATTLIST pcm_config period_count CDATA #IMPLIED>
+  <!ATTLIST pcm_config start_threshold CDATA #IMPLIED>
+  <!ATTLIST pcm_config stop_threshold CDATA #IMPLIED>
+  <!ATTLIST pcm_config silence_threshold CDATA #IMPLIED>
+  <!ATTLIST pcm_config avail_min CDATA #IMPLIED>
+  <!ATTLIST device name (speaker|headphone|earpiece|bt-sco|aux|builtin-mic|headset-mic|bt-sco-mic|voice-call|bt-voice-call|compress_offload) #REQUIRED>
+  <!ATTLIST path name CDATA #IMPLIED>
+  <!ELEMENT param EMPTY>
+  <!ATTLIST param name CDATA #REQUIRED>
+  <!ATTLIST param val CDATA #REQUIRED>
+  <!ELEMENT ctl EMPTY>
+  <!ATTLIST ctl name CDATA #REQUIRED>
+  <!ATTLIST ctl val CDATA #REQUIRED>
+]>
+<!--
+     This file is used to declare various board specific audio configs
+-->
+
+<AudioConfigs>
+
+  <alsa_device name="music"
+               card_id="-1"
+               card_name="tegrart5639"
+               device_id="0">
+    <pcm_config rate="48000"
+            channels="2"
+            bps="16"
+            period_size="512"
+            period_count="4"
+            start_threshold="2047"
+            stop_threshold="2048"
+            silence_threshold="0"
+            avail_min="1"/>
+    <param name="ulp" val="0"/>
+    <param name="compress_offload" val="0"/>
+    <param name="ulp formats" val="mp3 aac"/>
+    <param name="ulp rates" val="48000 44100"/>
+    <param name="nvoice" val="1"/>
+    <param name="HW Rates" val="48000 44100"/>
+    <param name="flags" val="AUDIO_OUTPUT_FLAG_PRIMARY"/>
+
+    <path>
+      <!--playback paths-->
+      <ctl name="Speaker Playback Volume" val="0x20"/>
+      <ctl name="HP Playback Volume" val="0x1e"/>
+      <ctl name="Headphone Jack Switch" val="0"/>
+      <ctl name="Int Spk Switch" val="0"/>
+      <ctl name="Int Mic Switch" val="0"/>
+      <ctl name="Mic Jack Switch" val="0"/>
+      <ctl name="Codec VMixer Codec Switch" val="1"/>
+    </path>
+
+    <playback>
+      <path name="off">
+        <ctl name="Int Spk Switch" val="0"/>
+      </path>
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Headphone Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Headphone Jack Switch" val="0"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="SPK MIXR DAC R1 Switch" val="1"/>
+          <ctl name="SPK MIXR DAC R1 Switch" val="0" mode="AUDIO_MODE_IN_CALL" srate="16000"/>
+          <ctl name="SPK MIXR DAC R1 Switch" val="0" mode="AUDIO_MODE_IN_COMMUNICATION"/>
+          <ctl name="Int Spk Switch" val="1"/>
+          <ctl name="Speaker Playback Volume" val="0x20"/>
+        </path>
+        <path name="off">
+          <ctl name="SPK MIXR DAC R1 Switch" val="1"/>
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+      <device name="earpiece">
+        <path name="on">
+          <ctl name="SPK MIXR DAC R1 Switch" val="0"/>
+          <ctl name="Int Spk Switch" val="1"/>
+          <ctl name="Speaker Playback Volume" val="0x11"/>
+        </path>
+        <path name="off">
+          <ctl name="SPK MIXR DAC R1 Switch" val="1"/>
+        </path>
+      </device>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="Stereo ADC L2 Mux" val="DMIC1"/>
+          <ctl name="Stereo ADC R2 Mux" val="DMIC1"/>
+          <ctl name="Stereo ADC MIXL ADC1 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC1 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXL ADC2 Switch" val="1"/>
+          <ctl name="Stereo ADC MIXR ADC2 Switch" val="1"/>
+          <ctl name="DMIC Switch" val="DMIC1"/>
+          <ctl name="ADC Boost Gain" val="2"/>
+          <ctl name="Int Mic Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Stereo ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="ADC Boost Gain" val="0"/>
+          <ctl name="Int Mic Switch" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="RECMIXL BST2 Switch" val="1"/>
+          <ctl name="RECMIXR BST2 Switch" val="1"/>
+          <ctl name="Stereo ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo ADC R1 Mux" val="ADC"/>
+          <ctl name="Stereo ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Stereo ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Stereo ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="IN2 Mode Control" val="Single ended"/>
+          <ctl name="IN2 Boost" val="1"/>
+          <ctl name="Mic Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXL ADC1 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC1 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="0"/>
+        </path>
+      </device>
+    </capture>
+  </alsa_device>
+<!--
+  <alsa_device name="compress_offload"
+               card_id="-1"
+               card_name="tegrart5639"
+               device_id="6">
+    <pcm_config rate="48000"
+            channels="2"
+            bps="16"
+            period_size="1024"
+            period_count="4"
+            start_threshold="4095"
+            stop_threshold="4096"
+            silence_threshold="0"
+            avail_min="1"/>
+    <param name="compr_frag_size" val="1048576"/>
+    <param name="compr_num_frag" val="4"/>
+    <param name="flags" val="AUDIO_OUTPUT_FLAG_COMPRESS_OFFLOAD"/>
+
+    <playback>
+      <path name="off">
+        <ctl name="Int Spk Switch" val="0"/>
+      </path>
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Headphone Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Headphone Jack Switch" val="0"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="SPK MIXR DAC R1 Switch" val="1"/>
+          <ctl name="SPK MIXR DAC R1 Switch" val="0" mode="AUDIO_MODE_IN_CALL" srate="16000"/>
+          <ctl name="SPK MIXR DAC R1 Switch" val="0" mode="AUDIO_MODE_IN_COMMUNICATION"/>
+          <ctl name="Int Spk Switch" val="1"/>
+          <ctl name="Speaker Playback Volume" val="0x20"/>
+        </path>
+        <path name="off">
+          <ctl name="SPK MIXR DAC R1 Switch" val="1"/>
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+      <device name="earpiece">
+        <path name="on">
+          <ctl name="SPK MIXR DAC R1 Switch" val="0"/>
+          <ctl name="Int Spk Switch" val="1"/>
+          <ctl name="Speaker Playback Volume" val="0x11"/>
+        </path>
+        <path name="off">
+          <ctl name="SPK MIXR DAC R1 Switch" val="1"/>
+        </path>
+      </device>
+    </playback>
+  </alsa_device>
+-->
+  <alsa_device name="voice"
+               card_id="-1"
+               card_name="tegrart5639"
+               device_id="2">
+    <pcm_config rate="8000"
+                channels="1"
+                bps="16"
+                period_size="128"
+                period_count="4"
+                start_threshold="511"
+                stop_threshold="512"
+                silence_threshold="0"
+                avail_min="1"/>
+    <playback>
+      <device name="bt-sco"/>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+      <device name="bt-sco-mic"/>
+    </capture>
+  </alsa_device>
+
+  <alsa_device name="voice-call"
+               card_id="-1"
+               card_name="tegrart5639"
+               device_id="3">
+    <pcm_config rate="16000"
+                channels="2"
+                bps="16"
+                period_size="1024"
+                period_count="4"
+                start_threshold="4095"
+                stop_threshold="4096"
+                silence_threshold="0"
+                avail_min="1"/>
+
+    <call>
+      <path name="on">
+        <ctl name="Call Mode Switch" val="1"/>
+        <ctl name="SPK MIXR DAC R1 Switch" val="0"/>
+      </path>
+      <path name="off">
+        <ctl name="Int Spk Switch" val="0"/>
+        <ctl name="SPK MIXR DAC R1 Switch" val="1"/>
+        <ctl name="Call Mode Switch" val="0"/>
+      </path>
+
+      <at node="/dev/ttyACM2" type="VOLUME" cmd="at+clvl="/>
+      <at node="/dev/ttyACM2" type="IN_CALL" cmd="at%iapvc="/>
+
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Headphone Jack Switch" val="1"/>
+          <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=1\r\n"/>
+        </path>
+        <path name="off">
+          <ctl name="Headphone Jack Switch" val="0"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="Int Spk Switch" val="1"/>
+          <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=2\r\n"/>
+          <ctl name="Speaker Playback Volume" val="0x1e"/>
+        </path>
+        <path name="off">
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+      <device name="earpiece">
+        <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=0\r\n"/>
+        <path name="on">
+          <ctl name="Int Spk Switch" val="1"/>
+          <ctl name="Speaker Playback Volume" val="0xf"/>
+        </path>
+        <path name="off">
+        </path>
+      </device>
+    </call>
+
+    <call>
+      <pcm_config start_threshold="1"/>
+      <at node="/dev/ttyACM2" type="MUTE" cmd="at+cmut="/>
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="Stereo ADC L2 Mux" val="DMIC1"/>
+          <ctl name="Stereo ADC R2 Mux" val="DMIC1"/>
+          <ctl name="Stereo ADC MIXL ADC1 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC1 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXL ADC2 Switch" val="1"/>
+          <ctl name="Stereo ADC MIXR ADC2 Switch" val="1"/>
+          <ctl name="ADC IF1 Data Switch" val="Swap"/>
+          <ctl name="ADC Boost Gain" val="0"/>
+          <ctl name="DMIC Switch" val="DMIC1"/>
+          <ctl name="ADC Capture Volume" val="0x5F"/>
+          <ctl name="Int Mic Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Stereo ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="ADC IF1 Data Switch" val="Normal"/>
+          <ctl name="ADC Capture Volume" val="0x2F"/>
+          <ctl name="Int Mic Switch" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="RECMIXL BST2 Switch" val="1"/>
+          <ctl name="RECMIXR BST2 Switch" val="1"/>
+          <ctl name="Stereo ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo ADC R1 Mux" val="ADC"/>
+          <ctl name="Stereo ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Stereo ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Stereo ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="IN2 Mode Control" val="Single ended"/>
+          <ctl name="IN2 Boost" val="5"/>
+          <ctl name="Mic Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXL ADC1 Switch" val="0"/>
+          <ctl name="Stereo ADC MIXR ADC1 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="0"/>
+        </path>
+      </device>
+    </call>
+  </alsa_device>
+
+  <alsa_device name ="bt-voice-call"
+          card_id="-1"
+          card_name="tegrart5639"
+          device_id="4">
+   <pcm_config rate="8000"
+           channels="1"
+           bps="16"
+           period_size="256"
+           period_count="4"
+           start_threshold="1023"
+           stop_threshold="1024"
+           silence_threshold="0"
+           avail_min="1"/>
+   <call>
+     <path name="on">
+       <ctl name="Call Mode Switch" val="1"/>
+       <ctl name="Int Spk Switch" val="0"/>
+     </path>
+     <path name="off">
+       <ctl name="Call Mode Switch" val="0"/>
+     </path>
+     <at node="/dev/ttyACM2" type="VOLUME" cmd="at+clvl="/>
+     <at node="/dev/ttyACM2" type="IN_CALL" cmd="at%iapvc="/>
+     <device name="bt-sco">
+     <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=4\r\n"/>
+     </device>
+   </call>
+   <call>
+     <at node="/dev/ttyACM2" type="MUTE" cmd="at+cmut="/>
+     <device name="bt-sco-mic">
+     </device>
+   </call>
+  </alsa_device>
+
+  <alsa_device name ="aux"
+             card_id="-1"
+             card_name="Tegra"
+             device_id="3">
+    <pcm_config rate="48000"
+            channels="2"
+            bps="16"
+            period_size="512"
+            period_count="8"
+            start_threshold="4095"
+            stop_threshold="4096"
+            silence_threshold="0"
+            avail_min="1"/>
+    <param name="HW Rates" val="48000 44100 192000"/>
+    <playback>
+      <device name="aux"/>
+    </playback>
+  </alsa_device>
+
+  <alsa_device name="wfd">
+    <pcm_config rate="48000"
+                channels="2"
+                bps="16"
+                period_size="512"
+                period_count="4"/>
+    <playback>
+      <device name="wfd"/>
+    </playback>
+  </alsa_device>
+
+  <alsa_device name="music"
+               card_id="-1"
+               card_name="tegramax98090"
+               device_id="0">
+    <pcm_config rate="48000"
+                channels="2"
+                bps="16"
+                period_size="1024"
+                period_count="4"
+                start_threshold="4095"
+                stop_threshold="4096"
+                silence_threshold="0"
+                avail_min="1"/>
+    <param name="ulp" val="1"/>
+    <param name="compress_offload" val="0"/>
+    <param name="ulp formats" val="mp3 aac"/>
+    <param name="ulp rates" val="48000 44100"/>
+    <param name="nvoice" val="0"/>
+    <param name="HW Rates" val="48000 44100"/>
+
+    <playback>
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Left Headphone Mixer Left DAC Switch" val="1"/>
+          <ctl name="Right Headphone Mixer Right DAC Switch" val="1"/>
+          <ctl name="Headphone Left Volume" val="26"/>
+          <ctl name="Headphone Right Volume" val="26"/>
+          <ctl name="L Volume" val="57"/>
+          <ctl name="R Volume" val="57"/>
+          <ctl name="Headphone Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Headphone Jack Switch" val="0"/>
+          <ctl name="Left Headphone Mixer Left DAC Switch" val="0"/>
+          <ctl name="Right Headphone Mixer Right DAC Switch" val="0"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="Left Speaker Mixer Left DAC Switch" val="1"/>
+          <ctl name="Right Speaker Mixer Right DAC Switch" val="1"/>
+          <ctl name="Speaker Left Switch" val="1"/>
+          <ctl name="Speaker Right Switch" val="1"/>
+          <ctl name="Speaker Left Volume" val="36"/>
+          <ctl name="Speaker Right Volume" val="36"/>
+          <ctl name="Int Spk Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Speaker Left Switch" val="0"/>
+          <ctl name="Speaker Right Switch" val="0"/>
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+    </playback>
+
+    <param name="call capture rate" val="16000"/>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="ADCL Boost Volume" val="4"/>
+          <ctl name="ADCR Boost Volume" val="4"/>
+          <ctl name="ADCL Volume" val="12"/>
+          <ctl name="ADCR Volume" val="12"/>
+          <ctl name="DMic Pri Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="DMic Pri Switch" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+          <ctl name="Left ADC Mixer IN34 Switch" val="1"/>
+          <ctl name="Right ADC Mixer IN34 Switch" val="1"/>
+          <ctl name="ADCL Boost Volume" val="4"/>
+          <ctl name="ADCR Boost Volume" val="4"/>
+          <ctl name="ADCL Volume" val="12"/>
+          <ctl name="ADCR Volume" val="12"/>
+          <ctl name="Mic Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Mic Jack Switch" val="0"/>
+          <ctl name="Left ADC Mixer IN34 Switch" val="0"/>
+          <ctl name="Right ADC Mixer IN34 Switch" val="0"/>
+        </path>
+      </device>
+    </capture>
+  </alsa_device>
+
+  <alsa_device name="voice"
+               card_id="-1"
+               card_name="tegramax98090"
+               device_id="2">
+    <pcm_config rate="8000"
+                channels="1"
+                bps="16"
+                period_size="256"
+                period_count="4"
+                start_threshold="1023"
+                stop_threshold="1024"
+                silence_threshold="0"
+                avail_min="1"/>
+    <playback>
+      <device name="bt-sco"/>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+      <device name="bt-sco-mic"/>
+    </capture>
+  </alsa_device>
+
+  <alsa_device name="music"
+               card_id="0"
+               card_name="tegraakad"
+               device_id="4">
+    <pcm_config rate="48000"
+            channels="2"
+            bps="16"
+            period_size="1024"
+            period_count="4"
+            start_threshold="4095"
+            stop_threshold="4096"
+            silence_threshold="0"
+            avail_min="1"/>
+    <param name="ulp" val="0"/>
+    <param name="compress_offload" val="0"/>
+    <param name="ulp formats" val="mp3 aac"/>
+    <param name="ulp rates" val="48000 44100"/>
+    <param name="nvoice" val="0"/>
+    <param name="HW Rates" val="48000 44100"/>
+
+    <path>
+      <!--playback paths-->
+      <ctl name="Speaker Playback Volume" val="0x19"/>
+      <ctl name="Headphone Jack Switch" val="0"/>
+      <ctl name="Int Spk Switch" val="0"/>
+      <ctl name="Int Mic Switch" val="0"/>
+      <ctl name="Mic Jack Switch" val="0"/>
+    </path>
+
+    <playback>
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Headphone Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="I2S0 Mux" val="AMX1"/>
+          <ctl name="AMX1-0 Mux" val="APBIF4"/>
+          <ctl name="AMX1-1 Mux" val="APBIF5"/>
+          <ctl name="AMX1-2 Mux" val="APBIF6"/>
+          <ctl name="AMX1-3 Mux" val="APBIF7"/>
+          <ctl name="ADX1 Mux" val="I2S0"/>
+          <ctl name="APBIF4 Mux" val="ADX1-0"/>
+          <ctl name="APBIF5 Mux" val="ADX1-1"/>
+          <ctl name="APBIF6 Mux" val="ADX1-2"/>
+          <ctl name="APBIF7 Mux" val="ADX1-3"/>
+          <ctl name="APBIF8 Mux" val="I2S2"/>
+          <ctl name="I2S2 Mux" val="APBIF8"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="Int Spk Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="3"/>
+          <ctl name="RECMIXL BST2 Switch" val="1"/>
+          <ctl name="RECMIXR BST2 Switch" val="1"/>
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="1"/>
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="RECMIXL BST1 Switch" val="1"/>
+          <ctl name="RECMIXR BST1 Switch" val="1"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="0"/>
+        </path>
+      </device>
+    </capture>
+  </alsa_device>
+
+  <alsa_device name="voice"
+               card_id="0"
+               card_name="tegraakad"
+               device_id="8">
+    <pcm_config rate="8000"
+                channels="1"
+                bps="16"
+                period_size="256"
+                period_count="4"
+                start_threshold="1023"
+                stop_threshold="1024"
+                silence_threshold="0"
+                avail_min="1"/>
+    <playback>
+      <device name="bt-sco"/>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+      <device name="bt-sco-mic"/>
+    </capture>
+  </alsa_device>
+
+  <alsa_device name="voice-call"
+               card_id="-1"
+               card_name="tegraakad"
+               device_id="3">
+    <pcm_config rate="48000"
+                channels="2"
+                bps="16"
+                period_size="1024"
+                period_count="4"
+                start_threshold="4095"
+                stop_threshold="4096"
+                silence_threshold="0"
+                avail_min="1"/>
+
+    <call>
+      <path name="on">
+        <ctl name="Call Mode Switch" val="1"/>
+      </path>
+      <path name="off">
+        <ctl name="Call Mode Switch" val="0"/>
+      </path>
+
+      <at node="/dev/ttyACM2" type="VOLUME" cmd="at+clvl="/>
+      <at node="/dev/ttyACM2" type="IN_CALL" cmd="at%iapvc="/>
+
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Headphone Jack Switch" val="1"/>
+          <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=1\r\n"/>
+        </path>
+        <path name="off">
+          <ctl name="Headphone Jack Switch" val="0"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="Int Spk Switch" val="1"/>
+          <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=2\r\n"/>
+        </path>
+        <path name="off">
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+    </call>
+
+    <call>
+      <pcm_config start_threshold="1"/>
+      <at node="/dev/ttyACM2" type="MUTE" cmd="at+cmut="/>
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="3"/>
+          <ctl name="RECMIXL BST2 Switch" val="1"/>
+          <ctl name="RECMIXR BST2 Switch" val="1"/>
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="1"/>
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="RECMIXL BST1 Switch" val="1"/>
+          <ctl name="RECMIXR BST1 Switch" val="1"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="0"/>
+        </path>
+      </device>
+    </call>
+  </alsa_device>
+
+  <alsa_device name="music"
+               card_id="0"
+               card_name="tegrawmad"
+               device_id="4">
+    <pcm_config rate="48000"
+            channels="2"
+            bps="16"
+            period_size="1024"
+            period_count="4"
+            start_threshold="4095"
+            stop_threshold="4096"
+            silence_threshold="0"
+            avail_min="1"/>
+    <param name="ulp" val="0"/>
+    <param name="compress_offload" val="0"/>
+    <param name="ulp formats" val="mp3 aac"/>
+    <param name="ulp rates" val="48000 44100"/>
+    <param name="nvoice" val="0"/>
+    <param name="HW Rates" val="48000 44100"/>
+
+    <path>
+      <!--playback paths-->
+      <ctl name="Speaker Playback Volume" val="0x19"/>
+      <ctl name="Headphone Jack Switch" val="0"/>
+      <ctl name="Int Spk Switch" val="0"/>
+      <ctl name="Int Mic Switch" val="0"/>
+      <ctl name="Mic Jack Switch" val="0"/>
+    </path>
+
+    <playback>
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Headphone Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="x Output Mixer Line Bypass Switch" val="1"/>
+          <ctl name="x Output Mixer HiFi Playback Switch" val="1"/>
+          <ctl name="ADX0 Mux" val="I2S4"/>
+          <ctl name="APBIF4 Mux" val="I2S0"/>
+          <ctl name="I2S4 Mux" val="AMX0"/>
+          <ctl name="I2S0 Mux" val="APBIF4"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="Int Spk Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="3"/>
+          <ctl name="RECMIXL BST2 Switch" val="1"/>
+          <ctl name="RECMIXR BST2 Switch" val="1"/>
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="1"/>
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="RECMIXL BST1 Switch" val="1"/>
+          <ctl name="RECMIXR BST1 Switch" val="1"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="0"/>
+        </path>
+      </device>
+    </capture>
+  </alsa_device>
+
+  <alsa_device name="voice"
+               card_id="0"
+               card_name="tegrawmad"
+               device_id="2">
+    <pcm_config rate="8000"
+                channels="1"
+                bps="16"
+                period_size="256"
+                period_count="4"
+                start_threshold="1023"
+                stop_threshold="1024"
+                silence_threshold="0"
+                avail_min="1"/>
+    <playback>
+      <device name="bt-sco"/>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+      <device name="bt-sco-mic"/>
+    </capture>
+  </alsa_device>
+
+  <alsa_device name="voice-call"
+               card_id="-1"
+               card_name="tegrawmad"
+               device_id="3">
+    <pcm_config rate="48000"
+                channels="2"
+                bps="16"
+                period_size="1024"
+                period_count="4"
+                start_threshold="4095"
+                stop_threshold="4096"
+                silence_threshold="0"
+                avail_min="1"/>
+
+    <call>
+      <path name="on">
+        <ctl name="Call Mode Switch" val="1"/>
+      </path>
+      <path name="off">
+        <ctl name="Call Mode Switch" val="0"/>
+      </path>
+
+      <at node="/dev/ttyACM2" type="VOLUME" cmd="at+clvl="/>
+      <at node="/dev/ttyACM2" type="IN_CALL" cmd="at%iapvc="/>
+
+      <device name="headphone">
+        <path name="on">
+          <ctl name="Headphone Jack Switch" val="1"/>
+          <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=1\r\n"/>
+        </path>
+        <path name="off">
+          <ctl name="Headphone Jack Switch" val="0"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="Int Spk Switch" val="1"/>
+          <at  node="/dev/ttyACM2" type="PROFILE" cmd="at%iaudcnf=2\r\n"/>
+        </path>
+        <path name="off">
+          <ctl name="Int Spk Switch" val="0"/>
+        </path>
+      </device>
+    </call>
+
+    <call>
+      <pcm_config start_threshold="1"/>
+      <at node="/dev/ttyACM2" type="MUTE" cmd="at+cmut="/>
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="3"/>
+          <ctl name="RECMIXL BST2 Switch" val="1"/>
+          <ctl name="RECMIXR BST2 Switch" val="1"/>
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="Int Mic Switch" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+          <ctl name="ADC Capture Switch" val="1"/>
+          <ctl name="STO1 ADC Boost Gain" val="1"/>
+          <ctl name="RECMIXL BST2 Switch" val="0"/>
+          <ctl name="RECMIXR BST2 Switch" val="0"/>
+          <ctl name="RECMIXL BST1 Switch" val="1"/>
+          <ctl name="RECMIXR BST1 Switch" val="1"/>
+          <ctl name="Stereo1 ADC L1 Mux" val="ADC"/>
+          <ctl name="Stereo1 ADC R1 Mux" val="ADC"/>
+          <ctl name="Sto1 ADC MIXL ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXR ADC1 Switch" val="1"/>
+          <ctl name="Sto1 ADC MIXL ADC2 Switch" val="0"/>
+          <ctl name="Sto1 ADC MIXR ADC2 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="RECMIXL BST1 Switch" val="0"/>
+          <ctl name="RECMIXR BST1 Switch" val="0"/>
+          <ctl name="Mic Jack Switch" val="0"/>
+        </path>
+      </device>
+    </call>
+  </alsa_device>
+
+  <alsa_device name="music"
+               card_id="-1"
+               card_name="tegraes755"
+               device_id="0">
+    <pcm_config rate="48000"
+                channels="2"
+                bps="16"
+                period_size="1024"
+                period_count="4"
+                start_threshold="4095"
+                stop_threshold="4096"
+                silence_threshold="0"
+                avail_min="1"/>
+    <param name="ulp" val="1"/>
+    <param name="ulp formats" val="mp3 aac"/>
+    <param name="ulp rates" val="48000 44100"/>
+    <param name="nvoice" val="0"/>
+    <param name="HW Rates" val="48000 44100"/>
+
+    <playback>
+      <device name="headphone">
+        <path name="on">
+          <ctl name="PT Algorithm" val="1"/>
+          <ctl name="Pass AUDIN1 MUX" val="PCM0.0"/>
+          <ctl name="Pass AUDIN2 MUX" val="PCM0.1"/>
+          <ctl name="DAC0.0 MUX" val="Pass AUDOUT1"/>
+          <ctl name="DAC0.1 MUX" val="Pass AUDOUT2"/>
+          <ctl name="Bits per Sample" val="4"/>
+          <ctl name="HPL Gain" val="12"/>
+          <ctl name="HPR Gain" val="12"/>
+          <ctl name="HP Gain" val="12"/>
+          <ctl name="HPR MIXER DAC0R" val="1"/>
+          <ctl name="HPL MIXER DAC0L" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="PT Algorithm" val="1"/>
+          <ctl name="Pass AUDIN1 MUX" val="0"/>
+          <ctl name="Pass AUDIN2 MUX" val="0"/>
+          <ctl name="DAC0.0 MUX" val="0"/>
+          <ctl name="DAC0.1 MUX" val="0"/>
+          <ctl name="Bits per Sample" val="0"/>
+          <ctl name="HPL Gain" val="0"/>
+          <ctl name="HPR Gain" val="0"/>
+          <ctl name="HP Gain" val="0"/>
+          <ctl name="HPR MIXER DAC0R" val="0"/>
+          <ctl name="HPL MIXER DAC0L" val="0"/>
+          <ctl name="PT Algorithm" val="0"/>
+        </path>
+      </device>
+      <device name="speaker">
+        <path name="on">
+          <ctl name="PT Algorithm" val="1"/>
+          <ctl name="Pass AUDIN1 MUX" val="PCM0.0"/>
+          <ctl name="Pass AUDIN2 MUX" val="PCM0.1"/>
+          <ctl name="DAC0.0 MUX" val="Pass AUDOUT1"/>
+          <ctl name="DAC0.1 MUX" val="Pass AUDOUT2"/>
+          <ctl name="Bits per Sample" val="4"/>
+          <ctl name="SPKRL Gain" val="12"/>
+          <ctl name="SPKRR Gain" val="12"/>
+          <ctl name="SPKR Gain" val="12"/>
+          <ctl name="SPKRR MIXER DAC0R" val="1"/>
+          <ctl name="SPKRL MIXER DAC0L" val="1"/>
+        </path>
+        <path name="off">
+          <ctl name="PT Algorithm" val="1"/>
+          <ctl name="Pass AUDIN1 MUX" val="0"/>
+          <ctl name="Pass AUDIN2 MUX" val="0"/>
+          <ctl name="DAC0.0 MUX" val="0"/>
+          <ctl name="DAC0.1 MUX" val="0"/>
+          <ctl name="Bits per Sample" val="0"/>
+          <ctl name="SPKRL Gain" val="0"/>
+          <ctl name="SPKRR Gain" val="0"/>
+          <ctl name="SPKR Gain" val="0"/>
+          <ctl name="SPKRR MIXER DAC0R" val="0"/>
+          <ctl name="SPKRL MIXER DAC0L" val="0"/>
+          <ctl name="PT Algorithm" val="0"/>
+        </path>
+      </device>
+      <device name="earpiece">
+        <path name="on">
+        </path>
+        <path name="off">
+        </path>
+      </device>
+    </playback>
+
+    <capture>
+      <pcm_config start_threshold="1"/>
+
+      <device name="builtin-mic">
+        <path name="on">
+          <ctl name="PT Algorithm" val="1"/>
+          <ctl name="Pass AUDIN3 MUX" val="ADC0"/>
+          <ctl name="Pass AUDIN4 MUX" val="ADC0"/>
+          <ctl name="PCM0.0 MUX" val="Pass AUDOUT3"/>
+          <ctl name="PCM0.1 MUX" val="Pass AUDOUT4"/>
+          <ctl name="MIC0 Gain" val="12"/>
+        </path>
+        <path name="off">
+          <ctl name="PT Algorithm" val="1"/>
+          <ctl name="Pass AUDIN3 MUX" val="0"/>
+          <ctl name="Pass AUDIN4 MUX" val="0"/>
+          <ctl name="PCM0.0 MUX" val="0"/>
+          <ctl name="PCM0.1 MUX" val="0"/>
+          <ctl name="MIC0 Gain" val="0"/>
+        </path>
+      </device>
+      <device name="headset-mic">
+        <path name="on">
+        </path>
+        <path name="off">
+        </path>
+      </device>
+    </capture>
+  </alsa_device>
+
+</AudioConfigs>

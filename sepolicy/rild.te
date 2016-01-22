@@ -1,0 +1,56 @@
+# Copyright (c) 2014, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# rild - radio interface layer daemon
+#
+type rild, domain;
+type rild_exec, exec_type, file_type;
+
+init_daemon_domain(rild)
+net_domain(rild)
+
+unix_socket_connect(rild, property, init)
+allow rild radio_prop:property_service set;
+allow rild self:capability { net_admin setuid };
+# NIC configuration (netlink)
+allow rild self:udp_socket { create ioctl };
+allow rild self:netlink_route_socket nlmsg_write;
+
+# AT channel ports /dev/ttyXXX
+allow rild radio_device:chr_file rw_file_perms;
+
+# sysfs access
+allow rild sysfs_wake_lock:file rw_file_perms;
+allow rild sysfs_radio:file rw_file_perms;
+allow rild sysfs_radio:dir r_dir_perms;
+allow rild sysfs_sysedp:file rw_file_perms;
+allow rild sysfs_sysedp:dir r_dir_perms;
+allow rild sysfs_gpio:file rw_file_perms;
+allow rild sysfs_gpio:dir r_dir_perms;
+allow rild sysfs_gpio:lnk_file r_file_perms;
+
+# /data/rfs access
+allow rild radio_data_icera_file:dir create_dir_perms;
+allow rild radio_data_icera_file:file create_file_perms;
+allow rild radio_data_icera_file:lnk_file create_file_perms;
+
+# system() syscall, run in rild domain
+allow rild shell_exec:file rx_file_perms;
+# rm, mkdir, (toolbox)
+# icera_log_serial_arm, run in rild domain
+allow rild system_file:file rx_file_perms;
+
+# mock_modem socket (NvMTT RIL tests)
+unix_socket_connect(rild, mock_modem, mock_modem)

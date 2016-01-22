@@ -1,0 +1,42 @@
+# Copyright (c) 2014, NVIDIA CORPORATION.  All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+#
+# icera-crashlogs
+#
+type icera-crashlogs, domain;
+type icera-crashlogs_exec, exec_type, file_type;
+
+init_daemon_domain(icera-crashlogs)
+
+allow icera-crashlogs radio_device:chr_file rw_file_perms;
+allow icera-crashlogs kernel:system syslog_read;
+unix_socket_connect(icera-crashlogs, property, init)
+allow icera-crashlogs radio_prop:property_service set;
+allow icera-crashlogs self:capability { fowner chown fsetid dac_override };
+allow icera-crashlogs self:capability2 syslog;
+unix_socket_connect(icera-crashlogs, logdr, logd)
+
+# /data/rfs access
+allow icera-crashlogs radio_data_icera_file:dir create_dir_perms;
+allow icera-crashlogs radio_data_icera_file:file create_file_perms;
+allow icera-crashlogs radio_data_icera_file:lnk_file create_file_perms;
+
+# system() syscall, run in icera-crashlogs domain
+allow icera-crashlogs shell_exec:file rx_file_perms;
+# logcat,
+# dmesg (toolbox),
+# crash-check-arm, run in icera-crashlogs domain
+allow icera-crashlogs system_file:file rx_file_perms;

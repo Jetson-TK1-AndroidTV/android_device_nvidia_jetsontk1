@@ -1,0 +1,4 @@
+on init
+    mkdir /vendor
+    mkdir /factory
+
