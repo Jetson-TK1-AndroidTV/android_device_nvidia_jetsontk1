@@ -17,10 +17,6 @@
 # Use the non-open-source parts, if they're present
 include vendor/nvidia/jetson/BoardConfigVendor.mk
 
-BOARD_SUPPORT_NVOICE := true
-
-BOARD_SUPPORT_NVAUDIOFX :=true
-
 
 # Enable dex-preoptimization to speed up first boot sequence
 ifeq ($(HOST_OS),linux)
