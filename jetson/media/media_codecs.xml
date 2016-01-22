@@ -162,5 +162,5 @@ Only the three quirks included above are recognized at this point:
         </MediaCodec>
     </Encoders>
     <Include href="media_codecs_google_tv.xml" />
-    <Include href="media_codecs_ffmpeg.xml" />
+    <Include href="media_codecs_google_video.xml" />
 </MediaCodecs>
