@@ -1,4 +1,4 @@
-#Copyright (c) 2011-2013 NVIDIA Corporation.  All Rights Reserved.
+#Copyright (c) 2016 NVIDIA Corporation.  All Rights Reserved.
 #
 #NVIDIA Corporation and its licensors retain all intellectual property and
 #proprietary rights in and to this software and related documentation.  Any
@@ -10,6 +10,9 @@ import init.jetson.usb.rc
 import init.ara32.rc
 
 on init
+    export NO_ADDR_COMPAT_LAYOUT_FIXUP 1
+
+    # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
     mkdir /storage/emulated 0555 root root
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
