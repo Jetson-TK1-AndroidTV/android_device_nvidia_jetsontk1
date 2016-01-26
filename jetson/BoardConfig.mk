@@ -171,7 +171,18 @@ BOARD_HAVE_LBH_SUPPORT := false
 	zygote.te
 
 # Recovery
-TARGET_RECOVERY_FSTAB = device/nvidia/jetson/fstab.jetson
+COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD -DDISABLE_ASHMEM_TRACKING
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
+TARGET_RECOVERY_FSTAB := device/nvidia/jetson/fstab.jetson
+# TWRP (being included with the stuff in "Recovery")
+TW_THEME := landscape_hdpi
+BOARD_HAS_NO_REAL_SDCARD := false
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+RECOVERY_SDCARD_ON_DATA := true
+TW_NO_SCREEN_TIMEOUT := true
+TW_NO_CPU_TEMP := true
+TW_BRIGHTNESS_PATH := "/brightness"
 
 BOARD_HAL_STATIC_LIBRARIES := libdumpstate.jetson libhealthd.jetson
 
