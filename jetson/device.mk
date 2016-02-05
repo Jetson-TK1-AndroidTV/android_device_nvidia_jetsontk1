@@ -72,21 +72,39 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml \
+    $(LOCAL_PATH)/media/media_codecs_google_tv.xml:system/etc/media_codecs_google_tv.xml
 
 # Bluetooth
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bdaddr:system/etc/bdaddr
 
+# Realtek Wifi
+PRODUCT_PACKAGES += \
+    dhcpcd.conf \
+    hostapd \
+    libwpa_client \
+    wpa_supplicant \
+    wpa_supplicant.conf
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+PRODUCT_PROPERTY_OVERRIDES += \
+    wifi.interface=wlan0
+    wifi.commchip_id=10 \
+    wifi.supplicant_scan_interval=15
+
 LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
+
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.jetson.rc:root/init.jetson.rc \
     $(LOCAL_PATH)/init.jetson.usb.rc:root/init.jetson.usb.rc \
     $(LOCAL_PATH)/init.recovery.jetson.rc:root/init.recovery.jetson.rc \
     $(LOCAL_FSTAB):root/fstab.jetson \
-    $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc
+    $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc \
+    $(LOCAL_PATH)/init.ara-common.rc:root/init.ara-common.rc
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
@@ -133,8 +151,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.cache-params=10240/20480/15 \
     media.aac_51_output_enabled=true \
     dalvik.vm.implicit_checks=none
-
-PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \

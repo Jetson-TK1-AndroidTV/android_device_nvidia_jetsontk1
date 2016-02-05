@@ -7,7 +7,7 @@
 #is strictly prohibited.
 
 import init.jetson.usb.rc
-import init.ara32.rc
+import init.ara-common.rc
 
 on init
     export NO_ADDR_COMPAT_LAYOUT_FIXUP 1
@@ -186,4 +186,3 @@ service cvc /vendor/bin/cvc
     user system
     group system
     class main
-
