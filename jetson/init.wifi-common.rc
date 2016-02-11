@@ -1,3 +1,4 @@
+import init.nv_dev_board.usb.rc
 
 on early-init
 
