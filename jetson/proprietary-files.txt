@@ -31,7 +31,6 @@ etc/hdcpsrm/hdcp2xtest.srm
 etc/nvram_43241.txt
 etc/ussrd.conf
 lib/hw/gps.brcm.so
-lib/hw/power.tegra.so
 lib/hw/sensors.tegra.so
 lib/libinvensense_hal.so
 lib/libmllite.so
