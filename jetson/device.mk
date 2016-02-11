@@ -104,8 +104,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.recovery.jetson.rc:root/init.recovery.jetson.rc \
     $(LOCAL_FSTAB):root/fstab.jetson \
     $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc \
-    $(LOCAL_PATH)/init.wifi-common.rc:root/init.wifi-common.rc \
-    $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc
+    $(LOCAL_PATH)/init.wifi-common.rc:root/init.tegra-common.rc \
+    $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
+    (LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
