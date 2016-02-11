@@ -1,5 +1,5 @@
 on boot
-    write /sys/class/android_usb/android0/iSerial 1234567890
+    write /sys/class/android_usb/android0/iSerial 7273654239
     write /sys/class/android_usb/android0/iManufacturer NVIDIA
     write /sys/class/android_usb/android0/iProduct jetson-tk1 
 
