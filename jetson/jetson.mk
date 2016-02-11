@@ -32,7 +32,6 @@ $(call inherit-product, device/google/atv/products/atv_base.mk)
 
 PRODUCT_NAME := jetson
 PRODUCT_DEVICE := jetson
-PRODUCT_BRAND := nvidia
+PRODUCT_BRAND := NVIDIA
 PRODUCT_MODEL := SHIELD Android TV
 PRODUCT_MANUFACTURER := NVIDIA
-PRODUCT_RESTRICT_VENDOR_FILES := true
