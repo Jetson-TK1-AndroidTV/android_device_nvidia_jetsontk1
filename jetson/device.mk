@@ -133,18 +133,17 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/nvaudio_conf.xml:system/etc/nvaudio_conf.xml \
     $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
 
-# Audio
 PRODUCT_PACKAGES += \
-    libtinyalsa \
-    audio.r_submix.default \
-    audio.usb.default \
     audio.a2dp.default \
+    audio.usb.default \
+    audio.r_submix.default \
+    libaudio-resampler \
     libaudiospdif \
-    libaudioutils \
     libtinycompress \
     tinycap \
     tinymix \
-    tinyplay
+    tinyplay \
+    xaplay
 
 # Add props used in stock
 PRODUCT_PROPERTY_OVERRIDES += \
