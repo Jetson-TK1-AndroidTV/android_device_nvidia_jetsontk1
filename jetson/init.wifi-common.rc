@@ -15,6 +15,14 @@ on early-init
 
 on post-fs
     # Performance tweaks for interactive governor
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+    chown system system /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+    chmod 0660 /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+    chown system system /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+    chmod 0660 /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+    chown system system /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+    chmod 0660 /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     chown system system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
@@ -31,6 +39,7 @@ on post-fs
     chown system system /sys/devices/system/cpu/cpufreq/interactive/touchboost_freq
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse
     chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    
 
     # Tune interactive governor parameters for Android TV UI animations
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 4000
