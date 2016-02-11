@@ -7,7 +7,7 @@
 #is strictly prohibited.
 
 import init.jetson.usb.rc
-import init.wifi-common.rc
+import init.tegra-common.rc
 
 on init
     export NO_ADDR_COMPAT_LAYOUT_FIXUP 1
