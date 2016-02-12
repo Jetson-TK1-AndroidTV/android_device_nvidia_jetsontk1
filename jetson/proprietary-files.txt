@@ -1,3 +1,16 @@
+app/LeanbackIme/LeanbackIme.apk
+priv-app/AtvRemoteService/AtvRemoteService.apk
+priv-app/AtvRemoteService/lib/arm/libatv_uinputbridge.so
+priv-app/GamepadPairingService/GamepadPairingService.apk
+priv-app/GlobalKeyInterceptor/GlobalKeyInterceptor.apk
+priv-app/LeanbackLauncher/LeanbackLauncher.apk
+priv-app/NvCustomize/NvCustomize.apk
+priv-app/RemoteControlService/RemoteControlService.apk
+priv-app/TV/TV.apk
+lib/libremotecontrolservice.so
+etc/permissions/com.google.widevine.software.drm.xml
+framework/com.google.widevine.software.drm.jar
+vendor/framework/com.nvidia.graphics.jar
 bin/glgps_nvidiaTegra2android
 bin/gps_select.sh
 bin/set_hwui_params.sh

@@ -13,41 +13,6 @@ on early-init
    # Wifi
     setprop wifi.interface wlan0
 
-on post-fs
-    # Performance tweaks for interactive governor
-    chown system system /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
-    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
-    chown system system /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
-    chmod 0660 /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
-    chown system system /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
-    chmod 0660 /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
-    chown system system /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
-    chmod 0660 /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
-    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chmod 0660 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chown system system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-    chmod 0660 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-    chown system system /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
-    chmod 0660 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
-    chown system system /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
-    chmod 0660 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse_duration
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/touchboost_freq
-    chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/touchboostpulse
-    chmod 0220 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
-    
-
-    # Tune interactive governor parameters for Android TV UI animations
-    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 4000
-    write /sys/devices/system/cpu/cpufreq/interactive/timer_slack 16000
-    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
-    write /sys/devices/system/cpu/cpufreq/interactive/target_loads 70
-    write /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration 800000
-
 on post-fs-data
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
@@ -64,104 +29,14 @@ on post-fs-data
     # Set indication (checked by vold) that we have finished this action
     setprop vold.post_fs_data_done 1
 
-    # create directory for runtime calibration data
-    # remount to rw and set perm to 770 till new diag product is created
-    mkdir /mnt/factory/touchscreen 0770 system system
-    export TOUCH_CONF_DIR /mnt/factory/touchscreen
-    export TOUCH_DATA_DIR /mnt/factory/touchscreen
-
-    # create directory for camera calibration data
-    mkdir /mnt/factory/camera 0666 system system
-
-    # cpu volt cap
-    mkdir /data/misc/cvc 0774 system system
-
 # Set up HDCP
 import init.hdcp.rc
 
 on boot
 
-# backlight
-    chown system system /sys/class/backlight/pwm-backlight/brightness
-
-# didim
-    chown system system /sys/class/graphics/fb0/device/smartdimmer/enable
-    chown system system /sys/class/graphics/fb0/device/smartdimmer/aggressiveness
-    chown system system /sys/class/graphics/fb0/device/smartdimmer/sd_window
-    chown system system /sys/class/graphics/fb0/device/smartdimmer/sd_window_enable
-
-# CMU
-    chown system system /sys/class/graphics/fb0/device/cmu_enable
-    chown system system /sys/class/graphics/fb1/device/cmu_enable
-
-# power
-    chown system system /sys/kernel/tegra_cap/core_cap_level
-    chown system system /sys/kernel/tegra_cap/core_cap_state
-    chown system system /sys/kernel/tegra_volt_cap/cpu_volt
-    chmod 0664 /sys/kernel/tegra_volt_cap/cpu_volt
-    chown system system /sys/module/cpu_tegra/parameters/cpu_user_cap
-    chown system system /sys/devices/platform/host1x/gk20a.0/enable_3d_scaling
-
 # audio
     chmod 0664 /sys/power/suspend/mode
     chown system audio /sys/power/suspend/mode
-
-# Tegra wakeup monitor
-    chown system system /sys/devices/platform/tegra_wakeup_monitor/cmd
-    chown system system /sys/devices/platform/tegra_wakeup_monitor/monitor_enable
-    chown system system /sys/devices/platform/tegra_wakeup_monitor/nf_enable
-    chown system system /sys/devices/platform/tegra_wakeup_monitor/am_enable
-    chown system system /sys/devices/platform/tegra_wakeup_monitor/init_ports
-    chown system system /sys/devices/platform/tegra_wakeup_monitor/add_ports
-    chown system system /sys/devices/platform/tegra_wakeup_monitor/del_ports
-
-
-
-# Power management settings
-    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/no_lp 0
-
-    # We no longer switch governor in display-on/off transitions and so don't
-    # need to set conservative governor parameters
-    # write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor conservative
-    # write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor conservative
-    # write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor conservative
-    # write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor conservative
-
-    # write /sys/devices/system/cpu/cpufreq/conservative/up_threshold 95
-    # write /sys/devices/system/cpu/cpufreq/conservative/down_threshold 50
-    # write /sys/devices/system/cpu/cpufreq/conservative/freq_step 3
-
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/target_loads
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
-    write /sys/devices/system/cpu/cpufreq/interactive/io_busy_threshold 50
-
-    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/down_delay 500
-    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/idle_top_freq 204000
-    write /sys/devices/system/cpu/cpuquiet/current_governor runnable
-
-    # Enable power gating of fast CPU's
-    write /sys/module/cpuidle_t11x/parameters/cpu_power_gating_in_idle 31
-    write /sys/module/cpuidle_t11x/parameters/slow_cluster_power_gating_noncpu 1
-    write /sys/module/cpuidle/parameters/power_down_in_idle 1
-
-    write /sys/module/cpuidle_t11x/parameters/stop_mc_clk_in_idle 1
-    write /sys/devices/system/cpu/cpuquiet/current_governor runnable
-    write /sys/devices/system/cpu/cpuquiet/tegra_cpuquiet/enable 1
-
-    # TBD: Remove the below line that give permissions for scaling_governor
-    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-    chown system system /sys/devices/tegradc.0/enable
-    chown system system /sys/devices/tegradc.1/enable
-    chown system system /sys/devices/platform/host1x/nvavp/boost_sclk
-    chown system system /sys/class/input/input1/enabled
-    chown system system /sys/class/input/input2/enabled
 
 # nvdps
     chown system system /sys/class/graphics/fb0/device/nvdps
