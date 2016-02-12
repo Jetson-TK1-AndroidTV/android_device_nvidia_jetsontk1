@@ -84,6 +84,7 @@ vendor/lib/hw/keystore.tegra.so
 vendor/lib/hw/memtrack.tegra.so
 vendor/lib/hw/ts.default.so
 vendor/lib/libaudioavp.so
+vendor/lib/libaudiopolicymanager.so
 vendor/lib/libclcore_nvidia.bc
 vendor/lib/libcuda.so
 vendor/lib/libdrmdecrypt.so
