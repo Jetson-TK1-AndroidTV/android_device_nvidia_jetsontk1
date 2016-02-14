@@ -1,6 +1,6 @@
-# NVIDIA Tegra5 "Jetson" development system
+# NVIDIA Tegra TK1 "Jetson" development system
 #
-# Copyright (c) 2013 NVIDIA Corporation.  All rights reserved.
+# Copyright (c) 2016 NVIDIA Corporation.  All rights reserved.
 
 ## Common product locale
 PRODUCT_LOCALES += en_US
