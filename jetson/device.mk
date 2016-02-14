@@ -139,11 +139,13 @@ PRODUCT_PACKAGES += \
     audio.r_submix.default \
     libaudio-resampler \
     libaudiospdif \
+    libtinyalsa \
     libtinycompress \
     tinycap \
     tinymix \
     tinyplay \
     xaplay
+
 
 # Add props used in stock
 PRODUCT_PROPERTY_OVERRIDES += \
