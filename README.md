@@ -2,7 +2,6 @@
 
 #About Jetson TK1
 
-Jetson TK1 dev board
 Jetson TK1 is NVIDIA's embedded Linux development platform featuring a Tegra K1 SOC (CPU+GPU+ISP in a single chip), selling for $192 USD. Jetson TK1 comes pre-installed with Linux4Tegra OS (basically Ubuntu 14.04 with pre-configured drivers). There is also some official support for running other distributions using the mainline kernel.
 
 #About Tegra K1
