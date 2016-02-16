@@ -1,6 +1,6 @@
 #Cyanogenmod 12.1 on NVIDIA Jetson TK1
 
-<center><img alt="" src=http://tdg2.s3.amazonaws.com/wp-content/uploads/2013/11/Cyanogenmod-logo.jpg /></center>
+<center><img src=http://tdg2.s3.amazonaws.com/wp-content/uploads/2013/11/Cyanogenmod-logo.jpg /></center>
 
 <img alt="Nvidia Jetson TK1" src="http://quickreachmedia.sytes.net/pics/nvidia-jetson-tk1.jpg" />
 
