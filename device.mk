@@ -1,6 +1,6 @@
-# NVIDIA Tegra5 "Jetson" development system
+# NVIDIA Tegra TK1 "Jetson" development system
 #
-# Copyright (c) 2013 NVIDIA Corporation.  All rights reserved.
+# Copyright (c) 2016 NVIDIA Corporation.  All rights reserved.
 
 ## Common product locale
 PRODUCT_LOCALES += en_US
@@ -43,7 +43,9 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     $(LOCAL_PATH)/permissions/com.nvidia.nvsi.xml:system/etc/permissions/com.nvidia.nvsi.xml \
-    $(LOCAL_PATH)/permissions/jetson_hardware.xml:system/etc/permissions/jetson_hardware.xml
+    $(LOCAL_PATH)/permissions/jetson_hardware.xml:system/etc/permissions/jetson_hardware.xml \
+    $(LOCAL_PATH)/permissions/tv_core_hardware.xml:system/etc/permissions/tv_core_hardware.xml \
+    $(LOCAL_PATH)/permissions/com.google.android.tv.installed.xml:system/etc/permissions/com.google.android.tv.installed.xml	
 
 # NVIDIA
 PRODUCT_COPY_FILES += \
@@ -60,6 +62,7 @@ PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
 # Codec Configs
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_tv.xml:system/etc/media_codecs_google_tv.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
@@ -68,25 +71,46 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bdaddr:system/etc/bdaddr
 
+# Realtek Wifi
+PRODUCT_PACKAGES += \
+    libwpa_client \
+    hostapd \
+    dhcpcd.conf \
+    wpa_supplicant \
+    wpa_supplicant.conf
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+PRODUCT_PROPERTY_OVERRIDES += \
+    wifi.interface=wlan0 \
+    wifi.commchip_id=10 \
+    wifi.supplicant_scan_interval=15
+
 LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
+
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.jetson.rc:root/init.jetson.rc \
     $(LOCAL_PATH)/init.jetson.usb.rc:root/init.jetson.usb.rc \
     $(LOCAL_PATH)/init.recovery.jetson.rc:root/init.recovery.jetson.rc \
     $(LOCAL_FSTAB):root/fstab.jetson \
-    $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc
+    $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc \
+    $(LOCAL_PATH)/init.tegra-common.rc:root/init.tegra-common.rc \
+    $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
+    $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
 
-
-# TV-specific Apps/Packages
 PRODUCT_PACKAGES += \
+    AppDrawer \
+    LeanbackLauncher \
+    LeanbackIme \
     TvProvider \
     TvSettings \
-    tv_input.default
+    tv_input.default \
+    TV
 
 PRODUCT_PACKAGES += \
     librs_jni \
@@ -103,18 +127,19 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/nvaudio_conf.xml:system/etc/nvaudio_conf.xml \
     $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
 
-# Audio
 PRODUCT_PACKAGES += \
-    libtinyalsa \
-    audio.r_submix.default \
-    audio.usb.default \
     audio.a2dp.default \
+    audio.usb.default \
+    audio.r_submix.default \
+    libaudio-resampler \
     libaudiospdif \
-    libaudioutils \
+    libtinyalsa \
     libtinycompress \
     tinycap \
     tinymix \
-    tinyplay
+    tinyplay \
+    xaplay
+
 
 # Add props used in stock
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -123,8 +148,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.cache-params=10240/20480/15 \
     media.aac_51_output_enabled=true \
     dalvik.vm.implicit_checks=none
-
-PRODUCT_PROPERTY_OVERRIDES += wifi.interface=wlan0
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \

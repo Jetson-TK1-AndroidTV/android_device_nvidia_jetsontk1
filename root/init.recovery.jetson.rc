@@ -1,0 +1,5 @@
+on init
+    mkdir /vendor
+    mkdir /factory
+    export PATH /sbin
+    export LD_LIBRARY_PATH .:/sbin

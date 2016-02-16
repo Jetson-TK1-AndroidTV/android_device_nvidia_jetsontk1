@@ -30,8 +30,8 @@ PRODUCT_PROPERTY_OVERRIDES := \
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 $(call inherit-product, device/nvidia/jetson/device.mk)
 
-PRODUCT_NAME := full_jetson
+PRODUCT_NAME := jetson
 PRODUCT_DEVICE := jetson
-PRODUCT_BRAND := nvidia
+PRODUCT_BRAND := NVIDIA
 PRODUCT_MODEL := SHIELD Android TV
 PRODUCT_MANUFACTURER := NVIDIA

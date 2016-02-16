@@ -17,6 +17,10 @@
 # Use the non-open-source parts, if they're present
 include vendor/nvidia/jetson/BoardConfigVendor.mk
 
+BOARD_SUPPORT_NVOICE := true
+
+BOARD_SUPPORT_NVAUDIOFX :=true
+
 
 # Enable dex-preoptimization to speed up first boot sequence
 ifeq ($(HOST_OS),linux)
@@ -49,6 +53,13 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/nvidia/jetson/bluetooth
 
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+WPA_SUPPLICANT_VERSION      := VER_0_8_X
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_iwlwifi
+BOARD_WLAN_DEVICE           := iwlwifi
+BOARD_HOSTAPD_DRIVER        := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_iwlwifi
+
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 
@@ -78,12 +89,13 @@ TARGET_USE_UBOOT := false
 TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_TYPE := fastboot
 
-# KERNEL
-TARGET_KERNEL_SOURCE := kernel/jetson
-TARGET_KERNEL_CONFIG := tegra12_android_hdmi-primary_defconfig
+# KERNEL (LINARO TASK SETTINGS)
+#TARGET_NO_KERNEL = false
+TARGET_KERNEL_SOURCE := kernel/tegra
 TARGET_KERNEL_APPEND_DTB := true
-TARGET_KERNEL_HAVE_EXFAT := true
-TARGET_KERNEL_HAVE_NTFS := true
+TARGET_KERNEL_CONFIG :=  cyanogenmod_jetson_defconfig
+TARGET_KERNEL_HAVE_EXFAT = true
+TARGET_KERNEL_HAVE_NTSF = true
 BUILD_KERNEL_MODULES := true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -163,8 +175,17 @@ BOARD_HAVE_LBH_SUPPORT := false
 	wpa.te \
 	zygote.te
 
-# Recovery
-TARGET_RECOVERY_FSTAB = device/nvidia/jetson/fstab.jetson
+# TWRP Recovery
+RECOVERY_VARIANT := twrp
+COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD -DDISABLE_ASHMEM_TRACKING
+TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
+TARGET_RECOVERY_FSTAB := device/nvidia/jetson/fstab.jetson
+TW_THEME := landscape_hdpi
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+BOARD_HAS_NO_REAL_SDCARD := true
+RECOVERY_SDCARD_ON_DATA := true
+TW_NO_SCREEN_TIMEOUT := true
+TW_NO_CPU_TEMP := true
 
 BOARD_HAL_STATIC_LIBRARIES := libdumpstate.jetson libhealthd.jetson
 

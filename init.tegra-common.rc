@@ -1,0 +1,190 @@
+#Copyright (c) 2011-2013 NVIDIA Corporation.  All Rights Reserved.
+#
+#NVIDIA Corporation and its licensors retain all intellectual property and
+#proprietary rights in and to this software and related documentation.  Any
+#use, reproduction, disclosure or distribution of this software and related
+#documentation without an express license agreement from NVIDIA Corporation
+#is strictly prohibited.
+
+import init.nv_dev_board.usb.rc
+
+on early-init
+
+   # Wifi
+    setprop wifi.interface wlan0
+
+on post-fs-data
+    mkdir /data/misc/wifi 0770 wifi wifi
+    mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    mkdir /data/misc/wifi/firmware 0770 wifi wifi
+    setprop wifi.supplicant wpa_supplicant
+    mkdir /data/misc/dhcp 0770 dhcp dhcp
+    mkdir /data/nvcam 0700 media camera
+    chown dhcp dhcp /data/misc/dhcp
+
+    mkdir /data/misc/wminput 0776 system system
+
+    mkdir /data/media 0770 media_rw media_rw
+
+    # Set indication (checked by vold) that we have finished this action
+    setprop vold.post_fs_data_done 1
+
+# Set up HDCP
+import init.hdcp.rc
+
+on boot
+
+# audio
+    chmod 0664 /sys/power/suspend/mode
+    chown system audio /sys/power/suspend/mode
+
+# nvdps
+    chown system system /sys/class/graphics/fb0/device/nvdps
+
+# Default Read Ahead value for sdcards
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+
+
+# Wifi support rx-filter
+    setprop wifi.rx-filter 1
+
+
+# set hwui properties depending on the screen resolution and the memory size
+service set_hwui_params /system/bin/set_hwui_params.sh
+    class main
+    user root
+    group root
+    oneshot
+
+# CPU Boost: boost CPU on input events
+service input-cfboost /system/bin/input_cfboost_init.sh
+    class main
+    user root
+    group root
+    oneshot
+
+service set_sensor_perm /system/bin/set_light_sensor_perm.sh
+    class main
+    user root
+    group root
+    oneshot
+
+on property:ro.debuggable=1
+    # EMC debug interface
+    chmod 666 /sys/kernel/debug/tegra_emc/eack_state
+
+service dhcpcd_p2p_wlan0 /system/bin/dhcpcd p2p-wlan0-0
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_wlan0 /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL -f/system/etc/dhcpcd/dhcpcd.conf
+     class main
+     disabled
+     oneshot
+
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_bt-pan /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_eth0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+    class late_start
+
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+    class late_start
+    disabled
+
+service fuse_usbdrive /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbdrive /storage/usbdrive
+    class late_start
+    disabled
+
+
+# bugreport is triggered by the VOLUME-DOWN and VOLUME-UP keys
+service bugreport /system/bin/dumpstate -d -p -B -o /data/data/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 115 114
+
+# Mount usb drives as /usbdrive. Generally usb drives are formatted with FAT
+# filesystem, so we support FAT as of now.
+on device-added-/sys/block/sda
+  mount vfat /dev/block/sda /mnt/media_rw/usbdrive
+
+on device-removed-/sys/block/sda
+  umount /mnt/media_rw/usbdrive
+
+service cvc /vendor/bin/cvc
+    user system
+    group system
+    class main
+
+# Very first boot. This case should be below the above case in init.rc so that
+# the above case, does not get executed on first boot. Very first boot is setting
+# persist.wlan.ti.calibrated=1 which triggers the above case.
+
+service dns_masq /system/bin/dnsmasq --no-daemon --no-resolv --no-poll --dhcp-option-force=43,ANDROID_METERED --dhcp-range=192.168.42.2,192.168.42.254,1h &
+    class main
+    user dhcp
+    group dhcp wifi system
+    disabled
+    oneshot
+
+service wpa_supplicant /system/bin/wpa_supplicant \
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+    -O/data/misc/wifi/sockets \
+    -e/data/misc/wifi/entropy.bin \
+    -g@android:wpa_wlan0
+#   we will start as root and wpa_supplicant will switch to user wifi
+#   after setting up the capabilities required for WEXT
+#   user wifi
+#   group wifi inet keystore
+    class main
+    socket wpa_wlan0 dgram 660 wifi wifi
+    disabled
+    oneshot
+
+# rtl8723ae chipset
+on property:wifi.commchip_id=10
+    symlink /system/vendor/firmware/rtlwifi/rtl8723fw_B.bin /data/misc/wifi/firmware/rtl8723fw_B.bin
+    insmod /system/lib/modules/rtl8723ae.ko
+
+# intel iwlwifi chipset
+on property:wifi.commchip_id=11
+   symlink /system/etc/firmware/iwlwifi-7260-7.ucode /data/misc/wifi/firmware/iwlwifi-7260-7.ucode
+   insmod /system/lib/modules/iwlwifi.ko
+   insmod /system/lib/modules/iwlmvm.ko
+   insmod /system/lib/modules/iwldvm.ko
+
