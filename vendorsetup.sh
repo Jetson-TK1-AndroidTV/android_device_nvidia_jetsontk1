@@ -21,4 +21,4 @@
 # function: add_lunch_combo generic-eng
 
 add_lunch_combo cm_jetson-eng
-add_lunch_combo cm_jetson-userdebug
+

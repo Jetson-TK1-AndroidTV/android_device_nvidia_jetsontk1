@@ -45,7 +45,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/permissions/com.nvidia.nvsi.xml:system/etc/permissions/com.nvidia.nvsi.xml \
     $(LOCAL_PATH)/permissions/jetson_hardware.xml:system/etc/permissions/jetson_hardware.xml \
     $(LOCAL_PATH)/permissions/tv_core_hardware.xml:system/etc/permissions/tv_core_hardware.xml \
-    $(LOCAL_PATH)/permissions/com.google.android.tv.installed.xml:system/etc/permissions/com.google.android.tv.installed.xml	
+    $(LOCAL_PATH)/permissions/com.google.android.tv.installed.xml:system/etc/permissions/com.google.android.tv.installed.xml
 
 # NVIDIA
 PRODUCT_COPY_FILES += \
@@ -58,6 +58,10 @@ PRODUCT_COPY_FILES += \
 
 # HDMI
 PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
+
+# TWRP Recovery fstab
+PRODUCT_COPY_FILES += \
+     device/nvidia/jetson/recovery/etc/twrp.fstab:recovery/root/etc/twrp.fstab
 
 # Codec Configs
 PRODUCT_COPY_FILES += \
