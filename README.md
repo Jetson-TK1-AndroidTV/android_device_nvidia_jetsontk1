@@ -1,5 +1,3 @@
-#Cyanogenmod 12.1 on NVIDIA Jetson TK1
-
 <img alt="Nvidia Jetson TK1" src="http://quickreachmedia.sytes.net/pics/nvidia-jetson-tk1.jpg" />
 
 #About Tegra K1
@@ -56,5 +54,4 @@ OpenMAX IL multimedia codec including H.264, VC-1 and VP8 through Gstreamer
 NPP (CUDA optimized NVIDIA Performance Primitives)
 OpenCV4Tegra (NEON + GLSL + quad-core CPU optimizations)
 VisionWorks
-
 
