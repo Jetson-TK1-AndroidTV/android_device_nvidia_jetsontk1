@@ -177,6 +177,10 @@ BOARD_HAVE_LBH_SUPPORT := false
 	zygote.te
 
 # TWRP Recovery
+<<<<<<< HEAD
+=======
+DEVICE_RESOLUTION := 1920x1200
+>>>>>>> a3edaf0a53ebd17b20b09da12d62fe3e733a5857
 RECOVERY_VARIANT := twrp
 DEVICE_RESOLUTION := 1920x1200
 TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson

@@ -55,4 +55,3 @@ NPP (CUDA optimized NVIDIA Performance Primitives)
 OpenCV4Tegra (NEON + GLSL + quad-core CPU optimizations)
 VisionWorks
 
-

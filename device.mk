@@ -102,8 +102,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.tegra-common.rc:root/init.tegra-common.rc \
     $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
     $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
+<<<<<<< HEAD
     $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
     $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
+=======
+    $(LOCAL_PATH)/init.tegra_sata.rc:root/init.tegra_sata.rc
+>>>>>>> a3edaf0a53ebd17b20b09da12d62fe3e733a5857
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
