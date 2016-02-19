@@ -98,7 +98,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc \
     $(LOCAL_PATH)/init.tegra-common.rc:root/init.tegra-common.rc \
     $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
-    $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc
+    $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
+    $(LOCAL_PATH)/init.tegra_sata.rc:root/init.tegra_sata.rc
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
