@@ -6,8 +6,6 @@
 #documentation without an express license agreement from NVIDIA Corporation
 #is strictly prohibited.
 
-import init.tegra.rc
-
 on post-fs-data
     mount ext4 /dev/block/platform/tegra-sata.0/by-name/FCT /mnt/factory ro context=u:object_r:factory_file:s0
 
