@@ -18,6 +18,11 @@
 #define _BDROID_BUILDCFG_H
 
 #define BTM_DEF_LOCAL_NAME "Jetson TK1"
+// At present either USB or UART is supported
+#define BLUETOOTH_HCI_USE_USB          TRUE
+// Bluetooth Low Power Mode is supported on BT4.0
+#define HCILP_INCLUDED                 TRUE
+
 #define BTA_DM_COD {0x20, BTM_COD_MAJOR_AUDIO, BTM_COD_MINOR_SET_TOP_BOX}
 
 #define BLE_VND_INCLUDED TRUE

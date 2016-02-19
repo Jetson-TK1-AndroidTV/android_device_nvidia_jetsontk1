@@ -50,11 +50,7 @@ PRODUCT_COPY_FILES += \
 # NVIDIA
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/permissions/com.nvidia.blakemanager.xml:system/etc/permissions/com.nvidia.blakemanager.xml \
-    $(LOCAL_PATH)/permissions/com.nvidia.feature.xml:system/etc/permissions/com.nvidia.feature.xml	
-
-# Bluetooth
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+    $(LOCAL_PATH)/permissions/com.nvidia.feature.xml:system/etc/permissions/com.nvidia.feature.xml
 
 # HDMI
 PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
@@ -75,7 +71,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/bdaddr:system/etc/bdaddr
 
-# Realtek Wifi
+# Intel iwlwifi
 PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
@@ -87,8 +83,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
-    wifi.commchip_id=10 \
     wifi.supplicant_scan_interval=15
+
+# ADB Over Wifi
+PRODUCT_PROPERTY_OVERRIDES += \
+    service.adb.tcp.port=5555
 
 LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
@@ -102,7 +101,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc \
     $(LOCAL_PATH)/init.tegra-common.rc:root/init.tegra-common.rc \
     $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
-    $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc
+    $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
+    $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
+    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
@@ -216,4 +217,4 @@ $(call inherit-product-if-exists, hardware/nvidia/tegra124/tegra124.mk)
 $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-vendor.mk)
 #$(call inherit-product-if-exists, vendor/nvidia/shieldtablet/shieldtablet-vendor.mk)
 #$(call inherit-product-if-exists, vendor/nvidia/shield_common/blake-blobs.mk)
-$(call inherit-product, vendor/nvidia/jetson/jetson-vendor.mk)
+$(call inherit-product, vendor/nvidia/jetsontk1/jetson-vendor.mk)

@@ -15,7 +15,7 @@
 #
 
 # Use the non-open-source parts, if they're present
-include vendor/nvidia/jetson/BoardConfigVendor.mk
+include vendor/nvidia/jetsontk1/BoardConfigVendor.mk
 
 BOARD_SUPPORT_NVOICE := true
 
@@ -50,6 +50,7 @@ BOARD_USES_ALSA_AUDIO := true
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
+BLUETOOTH_HCI_USE_USB := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/nvidia/jetson/bluetooth
 
@@ -97,7 +98,6 @@ BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 TARGET_KERNEL_CONFIG :=  cyanogenmod_jetson_defconfig
 TARGET_KERNEL_HAVE_EXFAT = true
 TARGET_KERNEL_HAVE_NTSF = true
-BUILD_KERNEL_MODULES := true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson vmalloc=384M androidboot.selinux=permissive
@@ -177,12 +177,10 @@ BOARD_HAVE_LBH_SUPPORT := false
 	zygote.te
 
 # TWRP Recovery
-DEVICE_RESOLUTION := 1080x1920
 RECOVERY_VARIANT := twrp
-COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD -DDISABLE_ASHMEM_TRACKING
+DEVICE_RESOLUTION := 1920x1200
 TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
-TARGET_RECOVERY_FSTAB := device/nvidia/jetson/fstab.jetson
-TW_THEME := landscape_hdpi
+TARGET_RECOVERY_FSTAB := device/nvidia/jetson/recovery/etc/twrp.fstab
 RECOVERY_GRAPHICS_USE_LINELENGTH := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_SDCARD_ON_DATA := true

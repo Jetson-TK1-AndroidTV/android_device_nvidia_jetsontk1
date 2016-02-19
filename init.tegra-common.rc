@@ -12,6 +12,9 @@ on early-init
 
    # Wifi
     setprop wifi.interface wlan0
+   
+   # USB Bluetooth
+    setprop hw.bluetooth 1
 
 on post-fs-data
     mkdir /data/misc/wifi 0770 wifi wifi
