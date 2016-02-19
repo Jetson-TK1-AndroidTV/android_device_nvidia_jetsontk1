@@ -67,10 +67,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
 
-# Bluetooth
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/bdaddr:system/etc/bdaddr
-
 # Intel iwlwifi
 PRODUCT_PACKAGES += \
     libwpa_client \
