@@ -208,6 +208,8 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # set default USB configuration
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.service.adb.enable=1 \
+    persist.service.debuggable=1 \
     persist.sys.usb.config=mtp \
     ro.adb.secure=0
 
