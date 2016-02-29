@@ -15,7 +15,7 @@
 #
 
 # Use the non-open-source parts, if they're present
-include vendor/nvidia/jetsontk1/BoardConfigVendor.mk
+include vendor/nvidia/jetson/BoardConfigVendor.mk
 
 BOARD_SUPPORT_NVOICE := true
 
@@ -44,15 +44,14 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := cortex-a15
 TARGET_CPU_SMP := true
 
-# Audio
+# PowerHAL
+TARGET_POWERHAL_VARIANT := tegra
+
 BOARD_USES_GENERIC_AUDIO := false
 BOARD_USES_ALSA_AUDIO := true
 
-# Bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BLUETOOTH_HCI_USE_USB := true
-BOARD_HAVE_BLUETOOTH_BCM := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/nvidia/jetson/bluetooth
+# Bluetooth Bluez Stack
+TARGET_USE_BLUEZ := true
 
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
@@ -178,10 +177,10 @@ BOARD_HAVE_LBH_SUPPORT := false
 
 # TWRP Recovery
 RECOVERY_VARIANT := twrp
-DEVICE_RESOLUTION := 1920x1200
+TW_THEME := landscape_hdpi
 TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
-TARGET_RECOVERY_FSTAB := device/nvidia/jetson/recovery/etc/twrp.fstab
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TARGET_RECOVERY_FSTAB := device/nvidia/jetson/fstab.jetson
+#RECOVERY_GRAPHICS_USE_LINELENGTH := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_NO_SCREEN_TIMEOUT := true
@@ -193,7 +192,5 @@ ART_USE_HSPACE_COMPACT=true
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
-
-MALLOC_IMPL := dlmalloc
 
 BOARD_USES_GENERIC_INVENSENSE := false

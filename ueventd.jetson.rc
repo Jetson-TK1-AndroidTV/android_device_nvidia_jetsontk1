@@ -77,6 +77,7 @@
 /sys/devices/platform/tegra-sata* ata1/power/control    0660    system system
 /sys/devices/platform/tegra-sata* ata1/host0/target0:0:0/0:0:0:0/power/autosuspend_delay_ms    0660    system system
 /sys/devices/platform/tegra-sata* ata1/host0/target0:0:0/0:0:0:0/power/control    0660    system system
+
 /dev/hsicctl0             0660   system     system
 /dev/hsicctl1             0660   system     system
 /dev/hsicctl2             0660   system     system

@@ -62,7 +62,6 @@ PRODUCT_COPY_FILES += \
 # Codec Configs
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_tv.xml:system/etc/media_codecs_google_tv.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
@@ -81,17 +80,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15
 
-# ADB Over Wifi
-PRODUCT_PROPERTY_OVERRIDES += \
-    service.adb.tcp.port=5555
-
 LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
 
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.jetson.rc:root/init.jetson.rc \
-    $(LOCAL_PATH)/init.jetson.usb.rc:root/init.jetson.usb.rc \
     $(LOCAL_PATH)/init.recovery.jetson.rc:root/init.recovery.jetson.rc \
     $(LOCAL_FSTAB):root/fstab.jetson \
     $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc \
@@ -99,8 +93,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
     $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
     $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
-    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh \
-    $(LOCAL_PATH)/init.tegra_sata.rc:root/init.tegra_sata.rc
+    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
 
 
 ## REFERENCE_DEVICE
@@ -120,7 +113,17 @@ PRODUCT_PACKAGES += \
     com.android.future.usb.accessory \
     com.android.location.provider
 
-# basic lights HAL
+RRODUCT_PACKAGES += \
+    setup_fs \
+    e2fsck \
+    drmserver \
+    libdrmframework_jni
+
+# vendor HALs
+PRODUCT_PACKAGES += \
+    power.tegra
+
+# Basic lights HAL
 PRODUCT_PACKAGES += \
     lights.jetson
 
@@ -131,6 +134,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
 
 PRODUCT_PACKAGES += \
+    audio.primary.tegra \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
@@ -143,14 +147,12 @@ PRODUCT_PACKAGES += \
     tinyplay \
     xaplay
 
-
 # Add props used in stock
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vold.wipe_on_crypt_fail=1 \
     ro.com.widevine.cachesize=16777216 \
     media.stagefright.cache-params=10240/20480/15 \
-    media.aac_51_output_enabled=true \
-    dalvik.vm.implicit_checks=none
+    media.aac_51_output_enabled=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
@@ -180,20 +182,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/graphics/com.nvidia.graphics.xml:system/etc/permissions/com.nvidia.graphics.xml \
     $(LOCAL_PATH)/graphics/com.nvidia.miracast.xml:system/etc/permissions/com.nvidia.miracast.xml
 
-# vendor HALs
-PRODUCT_PACKAGES += \
-    gralloc.tegra \
-    hwcomposer.tegra \
-    power.tegra
-
 PRODUCT_PACKAGES += \
     lbh_images
-
-# HDCP SRM Support
-PRODUCT_PACKAGES += \
-    hdcp1x.srm \
-    hdcp2x.srm \
-    hdcp2xtest.srm
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
@@ -217,4 +207,5 @@ $(call inherit-product-if-exists, hardware/nvidia/tegra124/tegra124.mk)
 $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-vendor.mk)
 #$(call inherit-product-if-exists, vendor/nvidia/shieldtablet/shieldtablet-vendor.mk)
 #$(call inherit-product-if-exists, vendor/nvidia/shield_common/blake-blobs.mk)
-$(call inherit-product, vendor/nvidia/jetsontk1/jetson-vendor.mk)
+$(call inherit-product, vendor/nvidia/jetson/jetson-vendor.mk)
+
