@@ -1,3 +1,9 @@
+# HDMI only display
+persist.tegra.hdmi.primary = 1
+
+# hwcomposer selects max HDMI resolution
+persist.sys.hdmi.resolution = Max
+
 # hwcomposer tells surface flinger to always use 1920x1080 resolution
 # regardless of HDMI mode
 persist.sys.display.resolution = 1920x1080
@@ -18,3 +24,7 @@ pbc.dram.power=/sys/bus/i2c/devices/7-0049/power1_input
 pbc.gpu.power=/sys/bus/i2c/devices/7-004b/power1_input
 pbc.gpu.cap=/dev/gpu_freq_max
 pbc.gpu.cap.af=/sys/devices/platform/host1x/gk20a.0/devfreq/gk20a.0/available_frequencies
+
+
+# Widevine drm
+drm.service.enabled=true

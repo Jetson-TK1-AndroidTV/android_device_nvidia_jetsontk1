@@ -98,12 +98,34 @@ on post-fs-data
     setprop hdcp2xtest.srm.name "hdcp2xtest.srm"
 
 on boot
-  # bluetooth
-    # change back to bluetooth from system
-    chown bluetooth net_bt_stack /data/misc/bluetooth
+    start bt_init
 
-    # power down interface
-    write /sys/class/rfkill/rfkill0/state 0
+on property:init.svc.bluetoothd=running
+    start hci0_up
+
+on property:init.svc.bluetoothd=stopped
+    start hci0_down
+
+service bt_init /system/bin/logwrapper /system/bin/sh /system/etc/init.bt.sh
+    class main
+    user root
+    group bluetooth net_bt_stack system
+    disabled
+    oneshot
+
+service hci0_up /system/bin/logwrapper /system/xbin/hciconfig hci0 up
+    class main
+    group bluetooth
+    disabled
+    oneshot
+
+service hci0_down /system/bin/logwrapper /system/xbin/hciconfig hci0 down
+    class main
+    group bluetooth
+    disabled
+    oneshot
+
+import init.bluetooth.rc
 
     mount debugfs /sys/kernel/debug /sys/kernel/debug mode=755
 

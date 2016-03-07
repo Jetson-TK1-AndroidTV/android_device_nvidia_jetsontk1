@@ -1,5 +1,5 @@
 on boot
-    write /sys/class/android_usb/android0/iSerial 7273654239
+    write /sys/class/android_usb/android0/iSerial 9205633779
     write /sys/class/android_usb/android0/iManufacturer NVIDIA
     write /sys/class/android_usb/android0/iProduct jetson-tk1 
 
@@ -68,4 +68,4 @@ on property:sys.usb.config=ptp,adb
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
-    
+

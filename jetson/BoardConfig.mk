@@ -44,21 +44,21 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := cortex-a15
 TARGET_CPU_SMP := true
 
-# Audio
+# PowerHAL
+TARGET_POWERHAL_VARIANT := tegra
+
 BOARD_USES_GENERIC_AUDIO := false
 BOARD_USES_ALSA_AUDIO := true
 
-# Bluetooth
-BOARD_HAVE_BLUETOOTH := true
-BOARD_HAVE_BLUETOOTH_BCM := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/nvidia/jetson/bluetooth
+# Bluetooth Bluez Stack
+TARGET_USE_BLUEZ := true
 
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_rtl
-BOARD_WLAN_DEVICE           := rtlwifi
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_iwlwifi
+BOARD_WLAN_DEVICE           := iwlwifi
 BOARD_HOSTAPD_DRIVER        := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_rtl
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_iwlwifi
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
@@ -176,11 +176,12 @@ BOARD_HAVE_LBH_SUPPORT := false
 	zygote.te
 
 # TWRP Recovery
-COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD -DDISABLE_ASHMEM_TRACKING
-BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
-TARGET_RECOVERY_FSTAB := device/nvidia/jetson/fstab.jetson
+RECOVERY_VARIANT := twrp
 TW_THEME := landscape_hdpi
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
+TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
+TARGET_RECOVERY_FSTAB := device/nvidia/jetson/fstab.jetson
+#RECOVERY_GRAPHICS_USE_LINELENGTH := true
+BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_NO_SCREEN_TIMEOUT := true
 TW_NO_CPU_TEMP := true
@@ -191,7 +192,5 @@ ART_USE_HSPACE_COMPACT=true
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
-
-MALLOC_IMPL := dlmalloc
 
 BOARD_USES_GENERIC_INVENSENSE := false

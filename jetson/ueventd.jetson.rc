@@ -73,6 +73,11 @@
 /dev/block/platform/sdhci-tegra.3/by-name/CAC      0660   system     system
 /dev/block/platform/sdhci-tegra.3/by-name/FCT      0600   system     system
 /dev/block/platform/sdhci-tegra.3/by-name/UDA      0660   system     system
+# for HDD nodes
+/sys/devices/platform/tegra-sata* ata1/power/control    0660    system system
+/sys/devices/platform/tegra-sata* ata1/host0/target0:0:0/0:0:0:0/power/autosuspend_delay_ms    0660    system system
+/sys/devices/platform/tegra-sata* ata1/host0/target0:0:0/0:0:0:0/power/control    0660    system system
+
 /dev/hsicctl0             0660   system     system
 /dev/hsicctl1             0660   system     system
 /dev/hsicctl2             0660   system     system

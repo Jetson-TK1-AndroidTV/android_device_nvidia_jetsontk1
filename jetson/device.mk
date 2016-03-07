@@ -25,6 +25,10 @@ PRODUCT_COPY_FILES += \
 
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
+# Boot Animation
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/bootanimation.zip:system/media/bootanimation.zip
+
 # Keylayouts
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayouts/AliTV_Remote_V1_Airmouse.idc:system/usr/idc/AliTV_Remote_V1_Airmouse.idc \
@@ -53,19 +57,20 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     $(LOCAL_PATH)/permissions/com.nvidia.nvsi.xml:system/etc/permissions/com.nvidia.nvsi.xml \
-    $(LOCAL_PATH)/permissions/jetson_hardware.xml:system/etc/permissions/jetson_hardware.xml
-	
+    $(LOCAL_PATH)/permissions/jetson_hardware.xml:system/etc/permissions/jetson_hardware.xml \
+    $(LOCAL_PATH)/permissions/tv_core_hardware.xml:system/etc/permissions/tv_core_hardware.xml \
+    $(LOCAL_PATH)/permissions/com.google.android.tv.installed.xml:system/etc/permissions/com.google.android.tv.installed.xml
+
 # NVIDIA
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/permissions/com.nvidia.blakemanager.xml:system/etc/permissions/com.nvidia.blakemanager.xml \
-    $(LOCAL_PATH)/permissions/com.nvidia.feature.xml:system/etc/permissions/com.nvidia.feature.xml	
-
-# Bluetooth
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+    $(LOCAL_PATH)/permissions/com.nvidia.feature.xml:system/etc/permissions/com.nvidia.feature.xml
 
 # HDMI
 PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
+
+# TWRP Recovery fstab
+PRODUCT_COPY_FILES += \
+     device/nvidia/jetson/recovery/etc/twrp.fstab:recovery/root/etc/twrp.fstab
 
 # Codec Configs
 PRODUCT_COPY_FILES += \
@@ -75,11 +80,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
 
-# Bluetooth
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/bdaddr:system/etc/bdaddr
-
-# Realtek Wifi
+# Intel iwlwifi
 PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
@@ -91,7 +92,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
-    wifi.commchip_id=10 \
+    wifi.commchip_id=11 \
     wifi.supplicant_scan_interval=15
 
 LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
@@ -100,30 +101,42 @@ TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.jetson.rc:root/init.jetson.rc \
-    $(LOCAL_PATH)/init.jetson.usb.rc:root/init.jetson.usb.rc \
     $(LOCAL_PATH)/init.recovery.jetson.rc:root/init.recovery.jetson.rc \
     $(LOCAL_FSTAB):root/fstab.jetson \
     $(LOCAL_PATH)/ueventd.jetson.rc:root/ueventd.jetson.rc \
     $(LOCAL_PATH)/init.tegra-common.rc:root/init.tegra-common.rc \
     $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
-    $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc
+    $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
+    $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
+    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
+
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
 
-
-# TV-specific Apps/Packages
 PRODUCT_PACKAGES += \
+    Settings \
+    AppDrawer \
+    LeanbackLauncher \
+    LeanbackIme \
     TvProvider \
     TvSettings \
-    tv_input.default
+    tv_input.default \
+    TV
 
 PRODUCT_PACKAGES += \
     librs_jni \
     com.android.future.usb.accessory \
     com.android.location.provider
 
-# basic lights HAL
+RRODUCT_PACKAGES += \
+    setup_fs
+
+# vendor HALs
+PRODUCT_PACKAGES += \
+    power.tegra
+
+# Basic lights HAL
 PRODUCT_PACKAGES += \
     lights.jetson
 
@@ -134,6 +147,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
 
 PRODUCT_PACKAGES += \
+    audio.primary.tegra \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
@@ -146,14 +160,12 @@ PRODUCT_PACKAGES += \
     tinyplay \
     xaplay
 
-
 # Add props used in stock
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vold.wipe_on_crypt_fail=1 \
     ro.com.widevine.cachesize=16777216 \
     media.stagefright.cache-params=10240/20480/15 \
-    media.aac_51_output_enabled=true \
-    dalvik.vm.implicit_checks=none
+    media.aac_51_output_enabled=true
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
@@ -183,20 +195,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/graphics/com.nvidia.graphics.xml:system/etc/permissions/com.nvidia.graphics.xml \
     $(LOCAL_PATH)/graphics/com.nvidia.miracast.xml:system/etc/permissions/com.nvidia.miracast.xml
 
-# vendor HALs
-PRODUCT_PACKAGES += \
-    gralloc.tegra \
-    hwcomposer.tegra \
-    power.tegra
-
 PRODUCT_PACKAGES += \
     lbh_images
-
-# HDCP SRM Support
-PRODUCT_PACKAGES += \
-    hdcp1x.srm \
-    hdcp2x.srm \
-    hdcp2xtest.srm
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
@@ -211,6 +211,8 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # set default USB configuration
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.service.adb.enable=1 \
+    persist.service.debuggable=1 \
     persist.sys.usb.config=mtp \
     ro.adb.secure=0
 
@@ -219,3 +221,4 @@ $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-ve
 #$(call inherit-product-if-exists, vendor/nvidia/shieldtablet/shieldtablet-vendor.mk)
 #$(call inherit-product-if-exists, vendor/nvidia/shield_common/blake-blobs.mk)
 $(call inherit-product, vendor/nvidia/jetson/jetson-vendor.mk)
+
