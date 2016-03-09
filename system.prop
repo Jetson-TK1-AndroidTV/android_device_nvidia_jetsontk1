@@ -10,6 +10,8 @@ persist.sys.display.resolution = 1920x1080
 
 # use glcomposer as the default compositor
 persist.tegra.compositor=glcomposer
+persist.wlan.ti.calibrated = 0
+ro.sf.override_lcd_density = 1
 
 pbc.enabled=0
 pbc.log=0
@@ -25,6 +27,27 @@ pbc.gpu.power=/sys/bus/i2c/devices/7-004b/power1_input
 pbc.gpu.cap=/dev/gpu_freq_max
 pbc.gpu.cap.af=/sys/devices/platform/host1x/gk20a.0/devfreq/gk20a.0/available_frequencies
 
+# usb vendor and product ID definition
+ro.nv.usb.vid = 0955
+ro.nv.usb.pid.mtp = 7102
+ro.nv.usb.pid.mtp.adb = 7100
+ro.nv.usb.pid.rndis = 7103
+ro.nv.usb.pid.rndis.adb = 7103
+ro.nv.usb.pid.ptp = 7102
+ro.nv.usb.pid.ptp.adb = 7100
+
+#Set audioflinger resampler quality to DYN_HIGH_QUALITY
+af.resampler.quality = 7
+
+# Wifi
+wifi.interface=wlan0
+ap.interface=wlan0
+
+#playback type device, for cec
+ro.hdmi.device_type=4
+
+#used to enable adb over tcpip on port 5555 from Settings app
+persist.system.adb.tcp.enable = 0
 
 # Widevine drm
 drm.service.enabled=true

@@ -59,6 +59,9 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_iwlwifi
 BOARD_WLAN_DEVICE           := iwlwifi
 BOARD_HOSTAPD_DRIVER        := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_iwlwifi
+WIFI_DRIVER_FW_PATH_STA     := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
+WIFI_DRIVER_FW_PATH_AP      := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
+WIFI_DRIVER_FW_PATH_P2P     := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true

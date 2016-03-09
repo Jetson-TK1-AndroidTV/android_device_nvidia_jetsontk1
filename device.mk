@@ -15,6 +15,10 @@ PRODUCT_COPY_FILES += \
 
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
+# Boot Animation
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/bootanimation.zip:system/media/bootanimation.zip
+
 # Keylayouts
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayouts/AliTV_Remote_V1_Airmouse.idc:system/usr/idc/AliTV_Remote_V1_Airmouse.idc \
@@ -49,7 +53,6 @@ PRODUCT_COPY_FILES += \
 
 # NVIDIA
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/permissions/com.nvidia.blakemanager.xml:system/etc/permissions/com.nvidia.blakemanager.xml \
     $(LOCAL_PATH)/permissions/com.nvidia.feature.xml:system/etc/permissions/com.nvidia.feature.xml
 
 # HDMI
@@ -74,8 +77,8 @@ PRODUCT_PACKAGES += \
     wpa_supplicant \
     wpa_supplicant.conf
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
+    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
+    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant_overlay.conf
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15
@@ -93,8 +96,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.hdcp.rc:root/init.hdcp.rc \
     $(LOCAL_PATH)/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
     $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
-    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
-
+    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh \
+    $(LOCAL_PATH)/init.t124.rc:root/init.t124.rc
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
@@ -134,7 +137,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/nvaudio_fx.xml:system/etc/nvaudio_fx.xml
 
 PRODUCT_PACKAGES += \
-    audio.primary.tegra \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
@@ -206,6 +208,6 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 $(call inherit-product-if-exists, hardware/nvidia/tegra124/tegra124.mk)
 $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-vendor.mk)
 #$(call inherit-product-if-exists, vendor/nvidia/shieldtablet/shieldtablet-vendor.mk)
-#$(call inherit-product-if-exists, vendor/nvidia/shield_common/blake-blobs.mk)
+$(call inherit-product-if-exists, vendor/nvidia/shield_common/blake-blobs.mk)
 $(call inherit-product, vendor/nvidia/jetson/jetson-vendor.mk)
 

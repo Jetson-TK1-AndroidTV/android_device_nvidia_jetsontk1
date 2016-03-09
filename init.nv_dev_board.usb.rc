@@ -1,12 +1,11 @@
 on boot
-    write /sys/class/android_usb/android0/iSerial 9205633779
-    write /sys/class/android_usb/android0/iManufacturer NVIDIA
-    write /sys/class/android_usb/android0/iProduct jetson-tk1 
+    write /sys/class/android_usb/android0/iSerial ${ro.serialno}
+    write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
+    write /sys/class/android_usb/android0/iProduct "Tegra Device"
 
-    write /sys/class/android_usb/android0/f_rndis/manufacturer NVIDIA
-    write /sys/class/android_usb/android0/f_rndis/vendorID 0955
+    write /sys/class/android_usb/android0/f_rndis/manufacturer ${ro.product.manufacturer}
+    write /sys/class/android_usb/android0/f_rndis/vendorID ${ro.nv.usb.vid}
     write /sys/class/android_usb/android0/f_rndis/wceis 1
-    setprop sys.usb.config mtp,adb
 
 on fs
 	mkdir /dev/usb-ffs 0770 shell shell
@@ -24,12 +23,12 @@ on property:sys.usb.config=mtp
 
 on property:sys.usb.config=mtp,adb
     write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor 0955
-    write /sys/class/android_usb/android0/idProduct 7100
-    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/idVendor ${ro.nv.usb.vid}
+    write /sys/class/android_usb/android0/idProduct ${ro.nv.usb.pid.mtp.adb}
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable 1
     start adbd
-    setprop sys.usb.state mtp,adb
+    setprop sys.usb.state ${sys.usb.config}
 
 on property:sys.usb.config=rndis
     write /sys/class/android_usb/android0/enable 0
@@ -68,4 +67,3 @@ on property:sys.usb.config=ptp,adb
     write /sys/class/android_usb/android0/enable 1
     start adbd
     setprop sys.usb.state ${sys.usb.config}
-
