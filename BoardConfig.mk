@@ -44,11 +44,12 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := cortex-a15
 TARGET_CPU_SMP := true
 
-# PowerHAL
-TARGET_POWERHAL_VARIANT := tegra
+# powerhal
+BOARD_USES_POWERHAL := true
 
 BOARD_USES_GENERIC_AUDIO := false
 BOARD_USES_ALSA_AUDIO := true
+BOARD_USES_TEGRA_HDMI := true
 
 # Bluetooth Bluez Stack
 TARGET_USE_BLUEZ := true
@@ -105,8 +106,6 @@ BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson vmalloc=384M androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x01000000 --ramdisk_offset 0x02100000 --tags_offset 0x02000000
 
-# powerhal
-BOARD_USES_POWERHAL := true
 
 # Use CMU-style config with Nvcms
 NVCMS_CMU_USE_CONFIG := true
@@ -182,7 +181,7 @@ BOARD_HAVE_LBH_SUPPORT := false
 RECOVERY_VARIANT := twrp
 TW_THEME := landscape_hdpi
 TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
-TARGET_RECOVERY_FSTAB := device/nvidia/jetson/fstab.jetson
+TARGET_RECOVERY_FSTAB := device/nvidia/jetson/rootdir/etc/fstab.jetson
 #RECOVERY_GRAPHICS_USE_LINELENGTH := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_SDCARD_ON_DATA := true

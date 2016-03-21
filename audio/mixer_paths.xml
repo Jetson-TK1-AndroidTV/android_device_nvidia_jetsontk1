@@ -1,0 +1,45 @@
+<mixer>
+<!--
+<pcm_config name="out_default" channels="2" rate="48000" period_size="256" period_count="3"
+	format="S16_LE" start_threshold="512"  stop_threshold="768" />
+
+<pcm_config name="in_default" channels="1" rate="48000" period_size="256" period_count="3"
+	format="S16_LE" start_threshold="1"  stop_threshold="768" />
+
+<pcm_config name="hdmi_out" channels="2" rate="48000" period_size="256" period_count="3"
+	format="S16_LE" start_threshold="512"  stop_threshold="768" />
+
+<pcm name="multimedia" card="0" device="0" fast_out_config="out_default" lp_out_config="out_default" in_config="in_default" />
+<pcm name="hdmi" card="1" device="3" fast_out_config="hdmi_out" />
+-->
+
+	<!-- These are the initial mixer settings -->
+	<!-- general -->
+
+	<path name="headphone">
+	<!-- pcm="multimedia" //-->
+	</path>
+
+	<path name="comms">
+	<!-- pcm="multimedia" //-->
+	</path>
+
+	<path name="ambient">
+	<!-- pcm="multimedia" //-->
+	</path>
+
+	<path name="builtin-mic">
+	<!-- pcm="multimedia" //-->
+	</path>
+
+	<path name="aux-digital-out">
+	<!-- pcm="hdmi" //-->
+	</path>
+
+</mixer>
+<!--
+
+tinyplay /sdcard/Download/test.wav -D 0 -d 0 -p 256 -n 3 /* headphones */
+tinyplay /sdcard/Download/test.wav -D 1 -d 3 -p 256 -n 3 /* HDMI */
+
+//-->

@@ -93,3 +93,10 @@
 /sys/devices/platform/host1x/tegradc.0	smartdimmer/enable		0660 root graphics
 /sys/devices/platform/host1x/tegradc.0	smartdimmer/sd_window		0660 root graphics
 /sys/devices/platform/host1x/tegradc.0	smartdimmer/sd_window_enable	0660 root graphics
+
+#Gamepad reset
+/sys/devices/platform/gamepad*	gamepad_reset	0220	system	system
+
+#Blake touchpad node
+/sys/devices/platform/ozwpan/*	mode		0660	system	system
+/sys/devices/platform/tegra-xhci/*	mode		0660	system	system

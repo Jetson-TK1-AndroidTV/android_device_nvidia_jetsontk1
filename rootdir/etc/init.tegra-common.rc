@@ -6,9 +6,6 @@
 #documentation without an express license agreement from NVIDIA Corporation
 #is strictly prohibited.
 
-import init.nv_dev_board.usb.rc
-import init.t124.rc
-
 on early-init
 
    # Wifi
@@ -23,6 +20,7 @@ on post-fs-data
     cp /system/etc/firmware/brcm_p2p.conf /data/misc/wifi/p2p_supplicant.conf
     chmod 0660 /data/misc/wifi/p2p_supplicant.conf
     chown system:wifi /data/misc/wifi/p2p_supplicant.conf
+    /system/bin/ln -s /system/etc/firmware/iwlwifi-7260-7.ucode /data/misc/wifi/firmware/iwlwifi-7260-7.ucode
 
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     mkdir /data/nvcam 0700 media camera
@@ -40,6 +38,13 @@ import init.hdcp.rc
 
 on boot
 
+#ozwpan driver: WiFi direct USB shim driver
+    chown system system /dev/ozwpan
+    chown system system /sys/class/ozmo_wpan/ozwpan/devices
+    chown system system /sys/class/ozmo_wpan/ozwpan/select
+    chown system system /sys/class/ozmo_wpan/ozwpan/bind
+    chmod 0660 /sys/class/ozmo_wpan/ozwpan/bind
+
 # audio
     chmod 0664 /sys/power/suspend/mode
     chown system audio /sys/power/suspend/mode
@@ -50,10 +55,6 @@ on boot
 # Default Read Ahead value for sdcards
     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
-
-
-# Wifi support rx-filter
-    setprop wifi.rx-filter 1
 
 
 # set hwui properties depending on the screen resolution and the memory size
@@ -190,8 +191,5 @@ service dns_masq /system/bin/dnsmasq --no-daemon --no-resolv --no-poll --dhcp-op
 
 # Wifi support rx-filter
     setprop wifi.rx-filter 1
-
-# intel iwlwifi chipset
-   symlink /system/etc/firmware/iwlwifi-7260-7.ucode /data/misc/wifi/firmware/iwlwifi-7260-7.ucode
 
 
