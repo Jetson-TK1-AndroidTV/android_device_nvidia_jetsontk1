@@ -27,8 +27,9 @@ PRODUCT_PROPERTY_OVERRIDES := \
         net.dns2=8.8.4.4
 
 # Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+$(call inherit-product, device/google/atv/products/atv_base.mk)
 $(call inherit-product, device/nvidia/jetson/device.mk)
+$(call inherit-product, vendor/nexus/configs/nexus_tv.mk)
 
 PRODUCT_NAME := jetson
 PRODUCT_DEVICE := jetson

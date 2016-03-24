@@ -10,32 +10,22 @@ import init.nv_dev_board.usb.rc
 import init.tegra-common.rc
 
 on init
-    export NO_ADDR_COMPAT_LAYOUT_FIXUP 1
 
-    # See storage config details at http://source.android.com/tech/storage/
-    mkdir /mnt/shell/emulated 0700 shell shell
-    mkdir /storage/emulated 0555 root root
+    symlink /sdcard /mnt/sdcard
+    symlink /sdcard /storage/sdcard0
+    
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
     mkdir /storage/sdcard1 0700 root root
-
-    export EXTERNAL_STORAGE /storage/emulated/legacy
-    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
-    export EMULATED_STORAGE_TARGET /storage/emulated
-    export SECONDARY_STORAGE /storage/sdcard1
-
-    # Support legacy paths
-    symlink /storage/emulated/legacy /sdcard
-    symlink /storage/emulated/legacy /mnt/sdcard
-    symlink /storage/sdcard1 /mnt/sdcard2
-    symlink /storage/emulated/legacy /storage/sdcard0
-    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
-
-    # create directory for mounting usb drives
+    symlink /sdcard1 /mnt/sdcard1
+    symlink /sdcard1 /storage/sdcard1
+    
+     # create directory for mounting usb drives
     mkdir /mnt/media_rw/usbdrive 0700 media_rw media_rw
     mkdir /storage/usbdrive 0700 root root
     symlink /mnt/media_rw/usbdrive /storage/usbdrive
     symlink /mnt/media_rw/usbdrive /usbdrive
 
+    
     # create directory for mounting calibration partition
     mkdir /mnt/factory 0775 system system
 
@@ -56,7 +46,7 @@ on post-fs
     write /proc/sys/vm/page-cluster 0
 
 on post-fs-data
-    mkdir /data/media 0770 media_rw media_rw
+
     mkdir /data/nvcam 0700 media camera
 
     # NFC: create data/nfc for nv storage
@@ -148,7 +138,8 @@ import init.bluetooth.rc
 on fs
     setprop ro.crypto.tmpfs_options size=128m,mode=0771,uid=1000,gid=1000
     setprop ro.crypto.umount_sd false
-    setprop ro.crypto.fuse_sdcard true
+    setprop ro.gps.gpio 61
+    setprop ro.gpsstatus.changed true
     mount_all /fstab.jetson
 
 on post-fs-data
@@ -163,10 +154,6 @@ service setup_fs /system/bin/setup_fs \
     user root
     group root
     oneshot
-
-# virtual sdcard daemon running as media_rw (1023)
-service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
-    class late_start
 
 service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
     class late_start

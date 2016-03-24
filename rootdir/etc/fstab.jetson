@@ -6,18 +6,14 @@
 # NOTE: editted for sdcard boot.  / contains all of the subdirs on the sdcard and is added to cmdline
 /dev/block/platform/sdhci-tegra.3/by-name/APP        /system     ext4      ro                                                                  wait
 /dev/block/platform/sdhci-tegra.3/by-name/VNR        /vendor     ext4      ro                                                                  wait
-/dev/block/platform/sdhci-tegra.3/by-name/CAC        /cache      ext4      noatime,nosuid,nodev,data=writeback,nodelalloc,errors=panic         wait
-/dev/block/platform/sdhci-tegra.3/by-name/UDA        /data       ext4      noatime,nosuid,nodev,data=writeback,noauto_da_alloc,errors=panic    wait,encryptable=/dev/block/platform/sdhci-tegra.3/by-name/MDA
+/dev/block/platform/sdhci-tegra.3/by-name/CAC        /cache      ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic                      wait,check
+/dev/block/platform/sdhci-tegra.3/by-name/UDA        /data       ext4      noatime,nosuid,nodev,nomblk_io_submit,errors=panic                 wait,check,encryptable=/dev/block/platform/sdhci-tegra.3/by-name/crypto
 /dev/block/platform/sdhci-tegra.3/by-name/MSC        /misc       emmc      defaults                                                            defaults
 /dev/block/platform/sdhci-tegra.3/by-name/LNX        /boot       emmc      defaults                                                            defaults
 /dev/block/platform/sdhci-tegra.3/by-name/SOS        /recovery   emmc      defaults                                                            defaults
 /dev/block/platform/sdhci-tegra.3/by-name/USP        /staging    emmc      defaults                                                            defaults
-/dev/block/platform/sdhci-tegra.3/by-name/MDA        /metadata   emmc      defaults                                                            defaults
 /dev/block/zram0                                     none        swap      defaults                                                            zramsize=533413200
 
-/devices/platform/sdhci-tegra.2/mmc_host/mmc1*       auto        vfat      defaults                                                            voldmanaged=sdcard1:auto
-/devices/platform/tegra-ehci.0                       auto        vfat      defaults                                                            voldmanaged=usbdrive:auto
-/devices/platform/tegra-ehci.1                       auto        vfat      defaults                                                            voldmanaged=usbdrive:auto
-/devices/platform/tegra-ehci.2                       auto        vfat      defaults                                                            voldmanaged=usbdrive:auto
-/devices/platform/tegra-xhci                         auto        vfat      defaults                                                            voldmanaged=usbdrive:auto
-
+/devices/platform/sdhci-tegra.2/mmc_host*            auto        auto      defaults                                                            voldmanaged=sdcard1:auto,encryptable=userdata
+/devices/platform/tegra-xhci*                        auto        auto      defaults                                                            voldmanaged=usbdrive:auto,encryptable=userdata
+/devices/tegra-ehci*                                 auto        auto      defaults                                                            voldmanaged=usbdrive1:auto,encryptable=userdata

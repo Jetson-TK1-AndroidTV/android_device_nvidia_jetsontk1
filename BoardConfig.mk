@@ -93,14 +93,15 @@ TARGET_USE_UBOOT := false
 TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_TYPE := fastboot
 
-# KERNEL (LINARO TASK SETTINGS)
-#TARGET_NO_KERNEL = false
-TARGET_KERNEL_SOURCE := kernel/tegra
+# KERNEL
+TARGET_KERNEL_SOURCE := kernel/nvidia
 TARGET_KERNEL_APPEND_DTB := true
 BOARD_KERNEL_IMAGE_NAME := zImage-dtb
-TARGET_KERNEL_CONFIG :=  cyanogenmod_jetson_defconfig
-TARGET_KERNEL_HAVE_EXFAT = true
-TARGET_KERNEL_HAVE_NTSF = true
+TARGET_KERNEL_CONFIG :=  pure_jetson_defconfig
+KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
+KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.8/bin
+#TARGET_KERNEL_HAVE_EXFAT = true
+#TARGET_KERNEL_HAVE_NTSF = true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson vmalloc=384M androidboot.selinux=permissive
