@@ -131,17 +131,6 @@ service iprenew_eth0 /system/bin/dhcpcd -n
     disabled
     oneshot
 
-service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
-    class late_start
-
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
-    class late_start
-    disabled
-
-service fuse_usbdrive /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbdrive /storage/usbdrive
-    class late_start
-    disabled
-
 
 # bugreport is triggered by the VOLUME-DOWN and VOLUME-UP keys
 service bugreport /system/bin/dumpstate -d -p -B -o /data/data/com.android.shell/files/bugreports/bugreport
@@ -149,14 +138,6 @@ service bugreport /system/bin/dumpstate -d -p -B -o /data/data/com.android.shell
     disabled
     oneshot
     keycodes 115 114
-
-# Mount usb drives as /usbdrive. Generally usb drives are formatted with FAT
-# filesystem, so we support FAT as of now.
-on device-added-/sys/block/sda
-  mount vfat /dev/block/sda /mnt/media_rw/usbdrive
-
-on device-removed-/sys/block/sda
-  umount /mnt/media_rw/usbdrive
 
 service cvc /vendor/bin/cvc
     user system

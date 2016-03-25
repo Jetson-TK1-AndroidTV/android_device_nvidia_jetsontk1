@@ -126,57 +126,9 @@ BOARD_HAVE_LBH_SUPPORT := false
 # board specific sepolicy
 # BOARD_SEPOLICY_DIRS := device/nvidia/jetson/sepolicy
 
-# SELinux
-# BOARD_SEPOLICY_DIRS += device/nvidia/shieldtablet/sepolicy
-# BOARD_SEPOLICY_UNION += \
-        te_macros \
-        agpsd.te \
-        app.te \
-        bluetooth.te \
-        bootanim.te \
-        cvc.te \
-        device.te \
-        domain.te \
-        drmserver.te \
-        fild.te \
-        file_contexts \
-        file.te \
-        genfs_contexts \
-        gpload.te \
-        gpsd.te \
-        healthd.te\
-        hostapd.te \
-        icera-crashlogs.te \
-        icera-feedback.te \
-        icera-loader.te \
-        icera-switcherd.te \
-        init.te \
-        installd.te \
-        mediaserver.te \
-        mock_modem.te \
-        netd.te \
-        platform_app.te \
-        property_contexts \
-        property.te \
-        raydium.te \
-        recovery.te \
-        service.te \
-        service_contexts \
-        set_hwui.te \
-        shell.te \
-        surfaceflinger.te \
-        system_app.te \
-        system_server.te \
-        tee.te \
-        ueventd.te \
-        untrusted_app.te \
-        usb.te \
-        ussrd.te \
-        ussr_setup.te \
-        vold.te \
-        wifi_loader.te \
-	wpa.te \
-	zygote.te
+# Board specific SELinux policy variable definitions
+BOARD_SEPOLICY_DIRS += \
+    device/nvidia/sepolicy/common
 
 # TWRP Recovery
 RECOVERY_VARIANT := twrp
