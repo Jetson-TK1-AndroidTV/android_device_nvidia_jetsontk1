@@ -47,8 +47,6 @@ on init
     mount tmpfs tmpfs /mnt/tmp mode=0775,gid=1003
 
 on post-fs
-    write /sys/power/gpu_power_on 1
-    write /sys/module/input_cfboost/parameters/gpu_wakeup 1
     # Turn on swap
     swapon_all /fstab.jetson
 
