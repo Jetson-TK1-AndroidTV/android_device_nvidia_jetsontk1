@@ -56,13 +56,10 @@ TARGET_USE_BLUEZ := true
 
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_iwlwifi
-BOARD_WLAN_DEVICE           := iwlwifi
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_ath9k
+BOARD_WLAN_DEVICE           := ath9k
 BOARD_HOSTAPD_DRIVER        := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_iwlwifi
-WIFI_DRIVER_FW_PATH_STA     := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
-WIFI_DRIVER_FW_PATH_AP      := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
-WIFI_DRIVER_FW_PATH_P2P     := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_ath9k
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
@@ -103,7 +100,7 @@ TARGET_KERNEL_HAVE_EXFAT = true
 TARGET_KERNEL_HAVE_NTSF = true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson vmalloc=384M androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson ath9k.btcoex_enable=1 vmalloc=384M androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x01000000 --ramdisk_offset 0x02100000 --tags_offset 0x02000000
 
 

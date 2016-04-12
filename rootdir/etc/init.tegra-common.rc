@@ -17,10 +17,17 @@ on post-fs-data
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/firmware 0770 wifi wifi
 
-    cp /system/etc/firmware/brcm_p2p.conf /data/misc/wifi/p2p_supplicant.conf
-    chmod 0660 /data/misc/wifi/p2p_supplicant.conf
-    chown system:wifi /data/misc/wifi/p2p_supplicant.conf
-    /system/bin/ln -s /system/etc/firmware/iwlwifi-7260-7.ucode /data/misc/wifi/firmware/iwlwifi-7260-7.ucode
+    insmod /system/lib/modules/ath.ko
+    insmod /system/lib/modules/ath9k_hw.ko
+    insmod /system/lib/modules/ath9k_common.ko
+    insmod /system/lib/modules/ath9k.ko
+    insmod /system/lib/modules/bluetooth.ko
+    insmod /system/lib/modules/hidp.ko
+    insmod /system/lib/modules/bnep.ko
+    insmod /system/lib/modules/rfcomm.ko
+    insmod /system/lib/modules/btusb.ko
+    insmod /system/lib/modules/hci_uart.ko
+    insmod /system/lib/modules/ath3k.ko
 
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     mkdir /data/nvcam 0700 media camera
