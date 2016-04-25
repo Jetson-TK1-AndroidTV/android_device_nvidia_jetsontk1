@@ -11,6 +11,18 @@ on early-init
    # Wifi
     setprop wifi.interface wlan0
 
+on boot
+
+# Wifi support rx-filter
+    setprop wifi.rx-filter 1
+
+#ozwpan driver: WiFi direct USB shim driver
+    chown system system /dev/ozwpan
+    chown system system /sys/class/ozmo_wpan/ozwpan/devices
+    chown system system /sys/class/ozmo_wpan/ozwpan/select
+    chown system system /sys/class/ozmo_wpan/ozwpan/bind
+    chmod 0660 /sys/class/ozmo_wpan/ozwpan/bind
+
 on post-fs-data
 
     mkdir /data/misc/wifi 0770 wifi wifi
@@ -42,15 +54,6 @@ on post-fs-data
 
 # Set up HDCP
 import init.hdcp.rc
-
-on boot
-
-#ozwpan driver: WiFi direct USB shim driver
-    chown system system /dev/ozwpan
-    chown system system /sys/class/ozmo_wpan/ozwpan/devices
-    chown system system /sys/class/ozmo_wpan/ozwpan/select
-    chown system system /sys/class/ozmo_wpan/ozwpan/bind
-    chmod 0660 /sys/class/ozmo_wpan/ozwpan/bind
 
 # audio
     chmod 0664 /sys/power/suspend/mode
@@ -181,6 +184,7 @@ service wpa_supplicant /system/bin/wpa_supplicant \
 
 service p2p_supplicant /system/bin/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+    -I/system/etc/wifi/p2p_supplicant_overlay.conf \
     -m /data/misc/wifi/p2p_supplicant.conf -O/data/misc/wifi/sockets \
     -e/data/misc/wifi/entropy.bin -puse_p2p_group_interface=1p2p_device=1 \
     -g@android:wpa_wlan0
@@ -195,8 +199,3 @@ service dns_masq /system/bin/dnsmasq --no-daemon --no-resolv --no-poll --dhcp-op
     group dhcp wifi system
     disabled
     oneshot
-
-# Wifi support rx-filter
-    setprop wifi.rx-filter 1
-
-

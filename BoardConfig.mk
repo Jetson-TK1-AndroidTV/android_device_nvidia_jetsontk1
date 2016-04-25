@@ -107,12 +107,6 @@ BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x01000000 --ramdisk_offset 0x02100000 -
 # Use CMU-style config with Nvcms
 NVCMS_CMU_USE_CONFIG := true
 
-# BOARD_WIDEVINE_OEMCRYPTO_LEVEL
-# The security level of the content protection provided by the Widevine DRM plugin depends
-# on the security capabilities of the underlying hardware platform.
-# There are Level 1/2/3. To run HD contents, should be Widevine level 1 security.
-BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 1
-
 # Using the NCT partition
 TARGET_USE_NCT := false
 # LBH related defines
@@ -177,6 +171,7 @@ BOARD_HAVE_LBH_SUPPORT := false
 # TWRP Recovery
 RECOVERY_VARIANT := twrp
 TW_THEME := landscape_hdpi
+TW_SCREEN_BLANK_ON_BOOT := true
 TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
 TARGET_RECOVERY_FSTAB := device/nvidia/jetson/rootdir/etc/fstab.jetson
 #RECOVERY_GRAPHICS_USE_LINELENGTH := true

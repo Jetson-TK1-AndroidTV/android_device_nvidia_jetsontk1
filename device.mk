@@ -97,12 +97,12 @@ PRODUCT_PACKAGES += \
     dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
-    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant_overlay.conf
+
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15
+
+$(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
 
 LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
@@ -172,24 +172,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vold.wipe_on_crypt_fail=1 \
     ro.com.widevine.cachesize=16777216 \
+    drm.service.enabled=true \
     media.stagefright.cache-params=10240/20480/15 \
-    media.aac_51_output_enabled=true
+    media.aac_51_output_enabled=true \
+    dalvik.vm.implicit_checks=none
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196609
-
-#ENABLE_WIDEVINE_DRM := true
-ifeq ($(ENABLE_WIDEVINE_DRM),true)
-#enable Widevine drm
-PRODUCT_PROPERTY_OVERRIDES += drm.service.enabled=true
-PRODUCT_PACKAGES += \
-    com.google.widevine.software.drm.xml \
-    com.google.widevine.software.drm \
-    libwvdrmengine \
-    libwvm \
-    libWVStreamControlAPI_L3 \
-    libwvdrm_L3
-endif
 
 # NVIDIA hardware support
 PRODUCT_COPY_FILES += \
