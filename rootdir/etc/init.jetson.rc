@@ -156,7 +156,6 @@ on post-fs-data
 
 # create filesystems if necessary
 service setup_fs /system/bin/setup_fs \
-        /dev/block/platform/sdhci-tegra.3/by-name/UDA \
         /dev/block/platform/sdhci-tegra.3/by-name/CAC \
         /dev/block/platform/sdhci-tegra.3/by-name/FCT
     class core

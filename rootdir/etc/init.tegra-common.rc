@@ -162,10 +162,10 @@ service bugreport /system/bin/dumpstate -d -p -B -o /data/data/com.android.shell
 
 # Mount usb drives as /usbdrive. Generally usb drives are formatted with FAT
 # filesystem, so we support FAT as of now.
-on device-added-/sys/block/sda
-  mount vfat /dev/block/sda /mnt/media_rw/usbdrive
+on device-added-/sys/block/sdb
+  mount vfat /dev/block/sdb /mnt/media_rw/usbdrive
 
-on device-removed-/sys/block/sda
+on device-removed-/sys/block/sdb
   umount /mnt/media_rw/usbdrive
 
 service cvc /vendor/bin/cvc
@@ -199,3 +199,4 @@ service dns_masq /system/bin/dnsmasq --no-daemon --no-resolv --no-poll --dhcp-op
     group dhcp wifi system
     disabled
     oneshot
+
