@@ -51,24 +51,19 @@ BOARD_USES_GENERIC_AUDIO := false
 BOARD_USES_ALSA_AUDIO := true
 BOARD_USES_TEGRA_HDMI := true
 
-# Bluetooth Bluez Stack
-TARGET_USE_BLUEZ := true
-
+# Wifi related defines
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_iwlwifi
-BOARD_WLAN_DEVICE           := iwlwifi
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_bcmdhd
+BOARD_WLAN_DEVICE           := bcmdhd
 BOARD_HOSTAPD_DRIVER        := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_iwlwifi
-WIFI_DRIVER_FW_PATH_STA     := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
-WIFI_DRIVER_FW_PATH_AP      := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
-WIFI_DRIVER_FW_PATH_P2P     := "/data/misc/wifi/firmware/iwlwifi-7260-7.ucode"
+BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_bcmdhd
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 
 TARGET_BOARD_INFO_FILE := device/nvidia/jetson/board-info.txt
-TARGET_BOOTLOADER_BOARD_NAME := jetson
+TARGET_BOOTLOADER_BOARD_NAME := jetson_e
 
 # FS
 TARGET_COPY_OUT_VENDOR := vendor
@@ -94,17 +89,17 @@ TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_TYPE := fastboot
 
 # KERNEL
-TARGET_KERNEL_SOURCE := kernel/nvidia
+TARGET_KERNEL_SOURCE := kernel/tegra
 TARGET_KERNEL_APPEND_DTB := true
 BOARD_KERNEL_IMAGE_NAME := zImage-dtb
-TARGET_KERNEL_CONFIG :=  pure_jetson_defconfig
+TARGET_KERNEL_CONFIG :=  tegra12_jetson_defconfig
 KERNEL_TOOLCHAIN_PREFIX := arm-eabi-
 KERNEL_TOOLCHAIN := $(ANDROID_BUILD_TOP)/prebuilts/gcc/$(HOST_OS)-x86/arm/arm-eabi-4.8/bin
 #TARGET_KERNEL_HAVE_EXFAT = true
 #TARGET_KERNEL_HAVE_NTSF = true
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson vmalloc=384M androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson_e vmalloc=384M androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x01000000 --ramdisk_offset 0x02100000 --tags_offset 0x02000000
 
 
@@ -133,6 +128,7 @@ BOARD_SEPOLICY_DIRS += \
 # TWRP Recovery
 RECOVERY_VARIANT := twrp
 TW_THEME := landscape_hdpi
+TW_SCREEN_BLANK_ON_BOOT := true
 TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
 TARGET_RECOVERY_FSTAB := device/nvidia/jetson/rootdir/etc/fstab.jetson
 #RECOVERY_GRAPHICS_USE_LINELENGTH := true
