@@ -90,7 +90,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/media/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
     $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
 
-# Intel iwlwifi
+# Wifi
 PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
@@ -104,19 +104,23 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15
 
-LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
+LOCAL_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.jetson_e
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
 
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.jetson.rc \
-    init.recovery.jetson.rc \
-    fstab.jetson \
-    ueventd.jetson.rc \
-    init.tegra-common.rc \
-    init.hdcp.rc \
-    init.nv_dev_board.usb.rc
+    fstab.jetson_e \
+    init.jetson_e.rc \
+    init.jetson_e_common.rc \      
+    init.cal.rc \
+    init.comms.rc \
+    init.nv_dev_board.usb.rc \
+    init.ray_touch.rc \    
+    init.t124.rc \
+    init.tegra.rc \
+    init.tegra_emmc.rc \
+    ueventd.jetson_e.rc
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh \

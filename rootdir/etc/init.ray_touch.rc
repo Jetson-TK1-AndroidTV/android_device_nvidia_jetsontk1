@@ -1,0 +1,36 @@
+#Copyright (c) 2011-2013 NVIDIA Corporation.  All Rights Reserved.
+#
+#NVIDIA Corporation and its licensors retain all intellectual property and
+#proprietary rights in and to this software and related documentation.  Any
+#use, reproduction, disclosure or distribution of this software and related
+#documentation without an express license agreement from NVIDIA Corporation
+#is strictly prohibited.
+
+on init
+    chown system system /sys/devices/virtual/misc/touch/slowscan_enable
+
+on boot
+# Touch
+    chown system system /sys/class/input/input0/enabled
+
+    chown system system /sys/devices/tegradc.0/enable
+    chown system system /sys/devices/tegradc.1/enable
+    chown system system /sys/devices/platform/host1x/nvavp/boost_sclk
+    chown system system /sys/devices/virtual/misc/touch/report_mode
+    chown system system /sys/devices/virtual/misc/touch/selftest_spi_burst_read
+    chown system system /sys/devices/virtual/misc/touch/selftest_spi_burst_write
+    chown system system /sys/devices/virtual/misc/touch/selftest_spi_byte_read
+    chown system system /sys/devices/virtual/misc/touch/selftest_spi_byte_write
+    chown system system /sys/devices/virtual/misc/touch/touchfile_check
+    chown system system /sys/devices/virtual/misc/touch/selftest_enable
+    chown system system /sys/devices/virtual/misc/touch/get_platform_id_gpio
+    chown system system /sys/devices/virtual/misc/touch/self_test
+    chown system system /sys/class/input/input1/enabled
+    chown system system /sys/class/input/input2/enabled
+
+#Raydium touch setting
+service rm_ts_service    /vendor/bin/rm_ts_server
+    class main
+    user system
+    group system input
+
