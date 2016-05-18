@@ -2,7 +2,7 @@
 /boot          emmc    /dev/block/platform/sdhci-tegra.3/by-name/LNX
 /recovery      emmc    /dev/block/platform/sdhci-tegra.3/by-name/SOS
 /system        ext4    /dev/block/platform/sdhci-tegra.3/by-name/APP
-/data          ext4    /dev/block/platform/tegra-sata.0/by-num/p1
+/data          ext4    /dev/block/platform/sdhci-tegra.3/by-name/UDA
 /cache         ext4    /dev/block/platform/sdhci-tegra.3/by-name/CAC
 /vendor        ext4    /dev/block/platform/sdhci-tegra.3/by-name/VNR           flags=display="Vendor";backup=1;wipeingui
 /factory       ext4    /dev/block/platform/sdhci-tegra.3/by-name/FCT           flags=display="Factory";backup=1

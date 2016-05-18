@@ -103,6 +103,11 @@ BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson ath9k.btcoex_enable=1 vmalloc=384M androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x01000000 --ramdisk_offset 0x02100000 --tags_offset 0x02000000
 
+# BOARD_WIDEVINE_OEMCRYPTO_LEVEL
+# The security level of the content protection provided by the Widevine DRM plugin depends
+# on the security capabilities of the underlying hardware platform.
+# There are Level 1/2/3. To run HD contents, should be Widevine level 1 security.
+BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 1
 
 # Use CMU-style config with Nvcms
 NVCMS_CMU_USE_CONFIG := true

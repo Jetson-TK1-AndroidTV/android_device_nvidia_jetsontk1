@@ -88,8 +88,11 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
     dhcpcd.conf \
-    wpa_supplicant \
-    wpa_supplicant.conf
+    wpa_supplicant
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wifi/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf
 
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
@@ -160,6 +163,18 @@ PRODUCT_PACKAGES += \
     tinycap \
     tinymix \
     tinyplay
+
+ENABLE_WIDEVINE_DRM := true
+ifeq ($(ENABLE_WIDEVINE_DRM),true)
+#enable Widevine drm
+
+PRODUCT_PACKAGES += \
+    com.google.widevine.software.drm \
+    libwvdrmengine \
+    libwvm \
+    libWVStreamControlAPI_L1 \
+    libwvdrm_L1
+endif
 
 # Add props used in stock
 PRODUCT_PROPERTY_OVERRIDES += \
