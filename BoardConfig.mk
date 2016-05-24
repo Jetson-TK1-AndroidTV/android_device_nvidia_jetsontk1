@@ -97,10 +97,11 @@ TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_TYPE := fastboot
 
 # KERNEL (LINARO TASK SETTINGS)
-TARGET_KERNEL_SOURCE := kernel/l4t
+TARGET_KERNEL_SOURCE := kernel/jetson_21.4
 TARGET_KERNEL_APPEND_DTB := true
-KERNEL_CONFIG :=  tegra12_jetson_defconfig
-BUILD_KERNEL_MODULES := true
+BOARD_KERNEL_IMAGE_NAME := zImage-dtb
+TARGET_KERNEL_CONFIG :=  tegra12_jetson_defconfig
+TARGET_BUILD_KERNEL_MODULES := true
 TARGET_KERNEL_HAVE_EXFAT = true
 TARGET_KERNEL_HAVE_NTSF = true
 BOARD_KERNEL_BASE := 0x80000000
@@ -170,14 +171,15 @@ BOARD_HAVE_LBH_SUPPORT := false
         ussr_setup.te \
         vold.te \
         wifi_loader.te \
-	wpa.te \
-	zygote.te
+       	wpa.te \
+	      zygote.te
 
 # TWRP Recovery
-DEVICE_RESOLUTION := 1920x1200
+RECOVERY_VARIANT := twrp
+TW_THEME := landscape_hdpi
 TW_SCREEN_BLANK_ON_BOOT := true
-TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/foster
-TARGET_RECOVERY_FSTAB := device/nvidia/foster/rootdir/etc/fstab.jetson
+TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
+TARGET_RECOVERY_FSTAB := device/nvidia/jetson/rootdir/etc/fstab.jetson
 #RECOVERY_GRAPHICS_USE_LINELENGTH := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_SDCARD_ON_DATA := true

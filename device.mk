@@ -97,17 +97,17 @@ $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bc
 LOCAL_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.jetson
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
 
-
 # Ramdisk
+PRODUCT_PACKAGES += \
+        init.jetson.rc \
+        init.recovery.jetson.rc \
+        fstab.jetson \
+        ueventd.jetson.rc \
+        init.tegra-common.rc \
+        init.hdcp.rc \
+        init.nv_dev_board.usb.rc
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/init.jetson.rc:root/init.jetson.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.recovery.jetson.rc:root/init.recovery.jetson.rc \
-    $(LOCAL_FSTAB):root/fstab.jetson \
-    $(LOCAL_PATH)/rootdir/etc/ueventd.jetson.rc:root/ueventd.jetson.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.tegra-common.rc:root/init.tegra-common.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.hdcp.rc:root/init.hdcp.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
     $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
     $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
 

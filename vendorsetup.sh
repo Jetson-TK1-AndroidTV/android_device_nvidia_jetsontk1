@@ -20,5 +20,5 @@
 # In particular, you can add lunch options with the add_lunch_combo
 # function: add_lunch_combo generic-eng
 
-add_lunch_combo foster_e-eng
-add_lunch_combo foster_e-userdebug
+add_lunch_combo cm_foster-eng
+add_lunch_combo cm_foster-userdebug
