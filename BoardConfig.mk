@@ -34,7 +34,8 @@ endif
 TARGET_BOARD_PLATFORM := tegra
 TARGET_TEGRA_VERSION := t124
 TARGET_TEGRA_FAMILY := t12x
-TARGET_BOOTLOADER_BOARD_NAME := jetson
+TARGET_BOOTLOADER_BOARD_NAME := jetson-tk1
+TARGET_NO_RPC := true
 
 # CPU options
 TARGET_CPU_ABI := armeabi-v7a
@@ -64,8 +65,14 @@ BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_ath9k
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
 
-TARGET_BOARD_INFO_FILE := device/nvidia/jetson/board-info.txt
-TARGET_BOOTLOADER_BOARD_NAME := jetson
+TARGET_BOARD_INFO_FILE := device/nvidia/foster/board-info.txt
+TARGET_BOOTLOADER_BOARD_NAME := jetson-tk1
+
+# BOARD_WIDEVINE_OEMCRYPTO_LEVEL
+# The security level of the content protection provided by the Widevine DRM plugin depends
+# on the security capabilities of the underlying hardware platform.
+# There are Level 1/2/3. To run HD contents, should be Widevine level 1 security.
+BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 1
 
 # FS
 TARGET_COPY_OUT_VENDOR := vendor
@@ -91,16 +98,16 @@ TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_TYPE := fastboot
 
 # KERNEL (LINARO TASK SETTINGS)
-#TARGET_NO_KERNEL = false
-TARGET_KERNEL_SOURCE := kernel/jetson_21.4
+TARGET_KERNEL_SOURCE := kernel/tegra
 TARGET_KERNEL_APPEND_DTB := true
-BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 TARGET_KERNEL_CONFIG :=  tegra12_jetson_defconfig
-TARGET_KERNEL_HAVE_EXFAT = true
-TARGET_KERNEL_HAVE_NTSF = true
+TARGET_BUILD_KERNEL_MODULES := true
+TARGET_KERNEL_HAVE_EXFAT =: true
+TARGET_KERNEL_HAVE_NTSF =: true
+BOARD_KERNEL_IMAGE_NAME := zImage-dtb
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson ath9k.btcoex_enable=1 vmalloc=384M androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := androidboot.hardware=jetson-tk1 ath9k.btcoex_enable=1 vmalloc=384M androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x01000000 --ramdisk_offset 0x02100000 --tags_offset 0x02000000
 
 
@@ -165,22 +172,20 @@ BOARD_HAVE_LBH_SUPPORT := false
         ussr_setup.te \
         vold.te \
         wifi_loader.te \
-	wpa.te \
-	zygote.te
+       	wpa.te \
+	      zygote.te
 
 # TWRP Recovery
 RECOVERY_VARIANT := twrp
 TW_THEME := landscape_hdpi
 TW_SCREEN_BLANK_ON_BOOT := true
 TARGET_RECOVERY_DEVICE_DIRS += device/nvidia/jetson
-TARGET_RECOVERY_FSTAB := device/nvidia/jetson/rootdir/etc/fstab.jetson
+TARGET_RECOVERY_FSTAB := device/nvidia/foster/rootdir/etc/fstab.jetson-tk1
 #RECOVERY_GRAPHICS_USE_LINELENGTH := true
 BOARD_HAS_NO_REAL_SDCARD := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_NO_SCREEN_TIMEOUT := true
 TW_NO_CPU_TEMP := true
-
-BOARD_HAL_STATIC_LIBRARIES := libdumpstate.jetson libhealthd.jetson
 
 ART_USE_HSPACE_COMPACT=true
 

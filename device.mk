@@ -44,10 +44,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayouts/ADT-1_Remote.kl:system/usr/keylayout/ADT-1_Remote.kl \
     $(LOCAL_PATH)/keylayouts/Nexus_Remote.kl:system/usr/keylayout/Nexus_Remote.kl \
     $(LOCAL_PATH)/keylayouts/Vendor_20a0_Product_0001.kl:system/usr/keylayout/Vendor_20a0_Product_0001.kl \
-    $(LOCAL_PATH)/keylayouts/Vendor_18d1_Product_2c40.kl:system/usr/keylayout/Vendor_18d1_Product_2c40.kl \
-    $(LOCAL_PATH)/keylayouts/Vendor_0955_Product_7210.kl:system/usr/keylayout/Vendor_0955_Product_7210.kl \
-    $(LOCAL_PATH)/keylayouts/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/keylayouts/tegra-kbc.kl:system/usr/keylayout/tegra-kbc.kl
+    $(LOCAL_PATH)/keylayouts/Vendor_18d1_Product_2c40.kl:system/usr/keylayout/Vendor_18d1_Product_2c40.kl
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -74,7 +71,7 @@ PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
 
 # TWRP Recovery fstab
 PRODUCT_COPY_FILES += \
-     device/nvidia/jetson/recovery/etc/twrp.fstab:recovery/root/etc/twrp.fstab
+     device/nvidia/foster/recovery/etc/twrp.fstab:recovery/root/etc/twrp.fstab
 
 # Codec Configs
 PRODUCT_COPY_FILES += \
@@ -83,7 +80,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
 
-# Intel iwlwifi
+# wifi
 PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
@@ -97,23 +94,32 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
 
-LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
+LOCAL_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.jetson-tk1
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
 
-
-# Ramdisk
-PRODUCT_PACKAGES += \
-    init.jetson.rc \
-    init.recovery.jetson.rc \
-    fstab.jetson \
-    ueventd.jetson.rc \
-    init.tegra-common.rc \
-    init.hdcp.rc \
-    init.nv_dev_board.usb.rc
-
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh \
-    $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc
+    $(LOCAL_PATH)/rootdir/etc/power.jetson-tk1.rc:system/etc/power.jetson-tk1.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1.rc:root/init.jetson.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.recovery.jetson-tk1.rc:root/init.recovery.jetson-tk1.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1_common.rc:root/init.jetson-tk1_common.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1_emmc.rc:root/init.jetson-tk1_emmc.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.comms.rc:root/init.comms.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.cal.rc:root/init.cal.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.hdcp.rc:root/init.hdcp.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.ardbeg_sata.rc:root/init.jetson_sata.rc \
+    $(LOCAL_PATH)/rootdir/etc/fstab.jetson-tk1:root/fstab.jetson-tk1 \
+    $(LOCAL_PATH)/rootdir/etc/fstab.ardbeg_sata:root/fstab.jetson_sata \
+    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1.usb.rc:root/init.jetson-tk1.usb.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.tlk.rc:root/init.tlk.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.hdcp.rc:root/init.hdcp.rc \
+    $(LOCAL_PATH)/rootdir/etc/ueventd.ardbeg.rc:root/ueventd.jetson-tk1.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.ray_touch.rc:root/init.ray_touch.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.tegra.rc:root/init.tegra.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.tegra_emmc.rc:root/init.tegra_emmc.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.tlk.rc:root/init.tlk.rc \
+    $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
+    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
@@ -122,6 +128,7 @@ PRODUCT_PACKAGES += \
     AppDrawer \
     LeanbackLauncher \
     LeanbackIme \
+    Settings \
     TvProvider \
     TvSettings \
     tv_input.default \
@@ -137,6 +144,17 @@ RRODUCT_PACKAGES += \
     e2fsck \
     drmserver \
     libdrmframework_jni
+
+ENABLE_WIDEVINE_DRM := true
+ifeq ($(ENABLE_WIDEVINE_DRM),true)
+#enable Widevine DRM
+PRODUCT_PACKAGES += \
+    com.google.widevine.software.drm \
+    libwvdrmengine \
+    libwvm \
+    libWVStreamControlAPI_L1 \
+    libwvdrm_L1
+endif
 
 # vendor HALs
 PRODUCT_PACKAGES += \
@@ -177,13 +195,21 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/ussrd.conf:system/etc/ussrd.conf \
     $(LOCAL_PATH)/set_hwui_params.sh:system/bin/set_hwui_params.sh \
-    $(LOCAL_PATH)/power.ardbeg.rc:system/etc/power.ardbeg.rc \
     $(LOCAL_PATH)/nvcms/device.cfg:system/lib/nvcms/device.cfg \
     $(LOCAL_PATH)/graphics/com.nvidia.graphics.xml:system/etc/permissions/com.nvidia.graphics.xml \
     $(LOCAL_PATH)/graphics/com.nvidia.miracast.xml:system/etc/permissions/com.nvidia.miracast.xml
 
 PRODUCT_PACKAGES += \
     lbh_images
+
+WITH_EXFAT ?= true
+ifeq ($(WITH_EXFAT),true)
+TARGET_USES_EXFAT := true
+PRODUCT_PACKAGES += \
+    mount.exfat \
+    fsck.exfat \
+    mkfs.exfat
+endif
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
@@ -202,5 +228,5 @@ $(call inherit-product-if-exists, hardware/nvidia/tegra124/tegra124.mk)
 $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-vendor.mk)
 #$(call inherit-product-if-exists, vendor/nvidia/shieldtablet/shieldtablet-vendor.mk)
 $(call inherit-product-if-exists, vendor/nvidia/shield_common/blake32-blobs.mk)
+#$(call inherit-product, vendor/nvidia/jetsontk1/device-vendor.mk)
 $(call inherit-product, vendor/nvidia/jetson/jetson-vendor.mk)
-

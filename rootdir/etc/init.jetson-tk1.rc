@@ -1,0 +1,44 @@
+#Copyright (c) 2011-2014 NVIDIA Corporation.  All Rights Reserved.
+#
+#NVIDIA Corporation and its licensors retain all intellectual property and
+#proprietary rights in and to this software and related documentation.  Any
+#use, reproduction, disclosure or distribution of this software and related
+#documentation without an express license agreement from NVIDIA Corporation
+#is strictly prohibited.
+
+import init.jetson-tk1_emmc.rc
+import init.jetson-tk1_common.rc
+import init.t124.rc
+import init.cal.rc
+import init.jetson-tk1.usb.rc
+import init.ray_touch.rc
+
+on post-fs-data
+    write /sys/class/gpio/export 61
+    write /sys/class/gpio/gpio61/direction out
+    write /sys/class/gpio/gpio61/value 0
+    chown root system /sys/class/gpio/gpio61/value
+    chmod 0664 /sys/class/gpio/gpio61/value
+    chmod 0644 /sys/kernel/cluster/active
+    start start-gps
+
+on init
+    setprop sys.esrd.powermon_path /sys/bus/i2c/devices/1-0040/iio_device
+    setprop sys.esrd.powermon_channel 0
+    setprop sys.esrd.min_esr 95
+    setprop sys.esrd.max_esr 160
+    setprop sys.esrd.margin 42
+    setprop sys.esrd.nwindow 200
+    setprop sys.esrd.ntry 600
+    setprop sys.esrd.tsample 20
+    setprop sys.esrd.delay_start 900
+    setprop sys.esrd.delay_retry 900
+    setprop sys.esrd.delay_ok 604800
+    setprop sys.esrd.needed_coeff 0.97
+    setprop sys.esrd.needed_var 300
+    setprop sys.esrd.battery_thresh_high 60
+    setprop sys.esrd.battery_thresh_low 15
+    setprop sys.esrd.load_burst_duration 3
+    setprop sys.esrd.check_screen_off 1
+    chown system system /sys/power/sysedp/batmon/esr
+    chown system system /sys/bus/i2c/devices/1-0040/iio_device/running_mode
