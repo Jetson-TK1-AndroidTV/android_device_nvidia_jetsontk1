@@ -94,32 +94,23 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 $(call inherit-product-if-exists, hardware/broadcom/wlan/bcmdhd/config/config-bcm.mk)
 
-LOCAL_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.jetson-tk1
+LOCAL_FSTAB := $(LOCAL_PATH)/fstab.jetson
 TARGET_RECOVERY_FSTAB = $(LOCAL_FSTAB)
 
+
+# Ramdisk
+PRODUCT_PACKAGES += \
+    init.jetson.rc \
+    init.recovery.jetson.rc \
+    fstab.jetson \
+    ueventd.jetson.rc \
+    init.tegra-common.rc \
+    init.hdcp.rc \
+    init.nv_dev_board.usb.rc
+
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/power.jetson-tk1.rc:system/etc/power.jetson-tk1.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1.rc:root/init.jetson.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.recovery.jetson-tk1.rc:root/init.recovery.jetson-tk1.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1_common.rc:root/init.jetson-tk1_common.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1_emmc.rc:root/init.jetson-tk1_emmc.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.comms.rc:root/init.comms.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.cal.rc:root/init.cal.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.hdcp.rc:root/init.hdcp.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.ardbeg_sata.rc:root/init.jetson_sata.rc \
-    $(LOCAL_PATH)/rootdir/etc/fstab.jetson-tk1:root/fstab.jetson-tk1 \
-    $(LOCAL_PATH)/rootdir/etc/fstab.ardbeg_sata:root/fstab.jetson_sata \
-    $(LOCAL_PATH)/rootdir/etc/init.jetson-tk1.usb.rc:root/init.jetson-tk1.usb.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.nv_dev_board.usb.rc:root/init.nv_dev_board.usb.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.tlk.rc:root/init.tlk.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.hdcp.rc:root/init.hdcp.rc \
-    $(LOCAL_PATH)/rootdir/etc/ueventd.ardbeg.rc:root/ueventd.jetson-tk1.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.ray_touch.rc:root/init.ray_touch.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.tegra.rc:root/init.tegra.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.tegra_emmc.rc:root/init.tegra_emmc.rc \
-    $(LOCAL_PATH)/rootdir/etc/init.tlk.rc:root/init.tlk.rc \
-    $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc \
-    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh
+    $(LOCAL_PATH)/init.bt.sh:system/etc/init.bt.sh \
+    $(LOCAL_PATH)/init.bluetooth.rc:root/init.bluetooth.rc
 
 ## REFERENCE_DEVICE
 REFERENCE_DEVICE := ardbeg
@@ -192,12 +183,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196609
 
 # NVIDIA hardware support
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/ussrd.conf:system/etc/ussrd.conf \
-    $(LOCAL_PATH)/set_hwui_params.sh:system/bin/set_hwui_params.sh \
-    $(LOCAL_PATH)/nvcms/device.cfg:system/lib/nvcms/device.cfg \
-    $(LOCAL_PATH)/graphics/com.nvidia.graphics.xml:system/etc/permissions/com.nvidia.graphics.xml \
-    $(LOCAL_PATH)/graphics/com.nvidia.miracast.xml:system/etc/permissions/com.nvidia.miracast.xml
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_PATH)/ussrd.conf:system/etc/ussrd.conf \
+#    $(LOCAL_PATH)/set_hwui_params.sh:system/bin/set_hwui_params.sh \
+#    $(LOCAL_PATH)/nvcms/device.cfg:system/lib/nvcms/device.cfg \
+#    $(LOCAL_PATH)/graphics/com.nvidia.graphics.xml:system/etc/permissions/com.nvidia.graphics.xml \
+#    $(LOCAL_PATH)/graphics/com.nvidia.miracast.xml:system/etc/permissions/com.nvidia.miracast.xml
 
 PRODUCT_PACKAGES += \
     lbh_images
@@ -230,3 +221,4 @@ $(call inherit-product-if-exists, vendor/nvidia/proprietary-tegra124/tegra124-ve
 $(call inherit-product-if-exists, vendor/nvidia/shield_common/blake32-blobs.mk)
 #$(call inherit-product, vendor/nvidia/jetsontk1/device-vendor.mk)
 $(call inherit-product, vendor/nvidia/jetson/jetson-vendor.mk)
+$(call inherit-product-if-exists, vendor/google/atv/atv-vendor.mk)

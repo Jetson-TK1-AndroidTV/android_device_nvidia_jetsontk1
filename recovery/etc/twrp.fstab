@@ -8,4 +8,4 @@
 /factory       ext4    /dev/block/platform/sdhci-tegra.3/by-name/FCT           flags=display="Factory";backup=1
 /external_sd   vfat    /dev/block/mmcblk1p1 /dev/block/mmcblk1                 flags=display="Micro SDcard";storage;wipeingui;removable
 /usbstorage    vfat    /dev/block/sdb1                                         flags=display="USB Storage";storage;removable
-/satastorage   ext4    /dev/block/sda1                                         flags=display="SATA Storage";storage;removable
+/satadrive     ext4    /dev/block/sda1                                         flags=display="SATA Storage";storage;wipeingui;removable
