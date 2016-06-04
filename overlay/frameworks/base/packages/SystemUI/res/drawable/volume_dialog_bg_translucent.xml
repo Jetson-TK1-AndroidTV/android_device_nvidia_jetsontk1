@@ -26,7 +26,7 @@
      IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/system_primary_color_translucent" />
+    <solid android:color="@color/system_bar_background_transparent" />
     <corners
         android:topLeftRadius="0dp"
         android:topRightRadius="0dp"
