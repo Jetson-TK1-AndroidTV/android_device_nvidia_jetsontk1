@@ -117,6 +117,7 @@ REFERENCE_DEVICE := ardbeg
 
 PRODUCT_PACKAGES += \
     AppDrawer \
+    CMLeanbackCustomizer \
     LeanbackLauncher \
     LeanbackIme \
     Settings \
